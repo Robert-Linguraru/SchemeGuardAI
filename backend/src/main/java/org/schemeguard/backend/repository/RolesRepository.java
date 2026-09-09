@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface RolesRepository extends CrudRepository<Role, UUID> {
 
-    @Query("SELECT r FROM roles r WHERE r.name = :name")
+    @Query("SELECT r FROM Role r WHERE r.name = :name")
     Role findRoleByName(@Param("name") String name);
 }

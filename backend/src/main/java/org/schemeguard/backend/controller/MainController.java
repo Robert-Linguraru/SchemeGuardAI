@@ -6,10 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 @RestController
 public class MainController {
 
     private final RolesRepository rolesRepository;
+    private final Logger logger = Logger.getLogger(MainController.class.getName());
 
     public MainController(RolesRepository rolesRepository) {
         this.rolesRepository = rolesRepository;
@@ -21,10 +25,14 @@ public class MainController {
     }
 
     @GetMapping("/test")
-    public Role getRole(
-            @RequestParam String name
+    public Iterable<Role> getRole(
+            @RequestParam(required = false) String name
     ) {
-        return rolesRepository.findRoleByName(name);
+        logger.info(name);
+        if(name == null) {
+            return rolesRepository.findAll();
+        }
+        return List.of(rolesRepository.findRoleByName(name));
     }
 
 }
