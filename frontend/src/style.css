@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #172033;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
