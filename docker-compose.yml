@@ -1,6 +1,22 @@
 services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/schemeguard
+      SPRING_DATASOURCE_USERNAME: schemeguard
+      SPRING_DATASOURCE_PASSWORD: schemeguard
+      ML_SERVICE_URL: http://ml:8000
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      ml:
+        condition: service_started
+
   frontend:
-    image: node:22-bookworm
+    image: node:22-bookworm-slim
     working_dir: /app
     volumes:
       - ./frontend:/app
@@ -8,6 +24,31 @@ services:
     ports:
       - "5173:5173"
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - backend
+
+  ml:
+    build:
+      context: ./ML
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: schemeguard
+      POSTGRES_USER: schemeguard
+      POSTGRES_PASSWORD: schemeguard
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U schemeguard -d schemeguard"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   frontend_node_modules:
+  postgres_data:
