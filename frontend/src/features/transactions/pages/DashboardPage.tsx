@@ -7,7 +7,11 @@ import { getMockTransactions } from "../api/transactionsApi";
 import { TransactionStats } from "../components/TransactionStats";
 import { TransactionTable } from "../components/TransactionTable";
 
-export function DashboardPage() {
+interface DashboardPageProps {
+    onCreateRule: () => void;
+}
+
+export function DashboardPage({ onCreateRule }: DashboardPageProps) {
     const { user, logout } = useAuth();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -57,7 +61,7 @@ export function DashboardPage() {
             <section className="content">
                 <div className="page-heading">
                     <div><p className="eyebrow">PAYMENTS WORKSPACE</p><h2>Transaction overview</h2><p>Monitor interchange qualification and fees.</p></div>
-                    <span className="role-badge">{user?.status} · MERCHANT</span>
+                    <div className="heading-actions"><span className="role-badge">{user?.status} · MERCHANT</span><button className="create-rule-button" onClick={onCreateRule}>Create rule</button></div>
                 </div>
                 <TransactionStats transactions={transactions} />
                 <section className="transactions-card">

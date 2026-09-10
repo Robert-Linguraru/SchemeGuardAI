@@ -1,0 +1,214 @@
+.heading-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.create-rule-button,
+.page-nav-button,
+.secondary-button,
+.success-box button {
+    padding: 10px 14px;
+    border: 1px solid #c4d2dc;
+    border-radius: 8px;
+    background: #edf3f6;
+    color: var(--navy);
+    font-weight: 700;
+}
+
+.create-rule-button {
+    border-color: var(--coral);
+    background: var(--coral);
+    color: var(--white);
+}
+
+.create-rule-button:hover,
+.success-box button:hover {
+    background: #ff7168;
+    color: var(--white);
+}
+
+.rules-page .content {
+    margin-top: 45px;
+}
+
+.rule-builder-card {
+    margin-top: 28px;
+    padding: 28px;
+    border-radius: 18px;
+    background: var(--white);
+    color: var(--navy);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
+}
+
+.rule-form {
+    gap: 24px;
+}
+
+.form-section,
+.conditions-fieldset {
+    display: grid;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.form-section-heading h3,
+.conditions-fieldset legend {
+    margin: 3px 0 0;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.form-section-heading {
+    display: grid;
+    gap: 2px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.rule-form label {
+    color: var(--navy);
+    font-size: 13px;
+}
+
+.rule-form input,
+.rule-form select {
+    min-height: 44px;
+    background: #fbfdfe;
+    color: var(--navy);
+}
+
+.rule-form select {
+    width: 100%;
+    padding: 0 12px;
+    border: 1px solid #c4d2dc;
+    border-radius: 8px;
+}
+
+.field-help,
+.optional {
+    color: #65738b;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.field-help code {
+    padding: 2px 4px;
+    border-radius: 4px;
+    background: #edf3f6;
+}
+
+.conditions-fieldset {
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+}
+
+.condition-list {
+    display: grid;
+    gap: 12px;
+}
+
+.condition-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr auto;
+    align-items: end;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #f7fafb;
+}
+
+.remove-condition {
+    padding: 10px 8px;
+    background: transparent;
+    color: var(--red);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.secondary-button:hover,
+.remove-condition:hover {
+    filter: brightness(0.96);
+}
+
+.checkbox-label {
+    display: flex !important;
+    grid-template-columns: none;
+    align-items: center;
+    gap: 9px;
+}
+
+.checkbox-label input {
+    width: 18px;
+    min-height: 18px;
+    accent-color: var(--coral);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 4px;
+}
+
+.form-error ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+}
+
+.form-error span {
+    display: block;
+    margin-top: 6px;
+}
+
+.success-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 16px;
+    border: 1px solid #a9dfc4;
+    border-radius: 8px;
+    background: var(--green-bg);
+    color: var(--green);
+}
+
+.success-box button {
+    margin-left: auto;
+    border-color: #a9dfc4;
+    background: var(--white);
+    color: var(--green);
+}
+
+@media (max-width: 760px) {
+    .heading-actions,
+    .success-box {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-grid,
+    .condition-row {
+        grid-template-columns: 1fr;
+    }
+
+    .success-box button {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .rule-builder-card {
+        padding: 18px;
+    }
+
+    .page-nav-button {
+        width: 100%;
+    }
+}

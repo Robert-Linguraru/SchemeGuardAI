@@ -1,7 +1,17 @@
+import { useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { AuthPage } from "../features/auth/pages/AuthPage";
+import { RuleUploadPage } from "../features/rules/pages/RuleUploadPage";
 import { DashboardPage } from "../features/transactions/pages/DashboardPage";
 import { LoadingState } from "../shared/components/LoadingState";
+
+function AuthenticatedApp() {
+    const [view, setView] = useState<"dashboard" | "rules">("dashboard");
+
+    return view === "rules"
+        ? <RuleUploadPage onBack={() => setView("dashboard")} />
+        : <DashboardPage onCreateRule={() => setView("rules")} />;
+}
 
 export function App() {
     const { user, isLoading } = useAuth();
@@ -10,5 +20,5 @@ export function App() {
         return <LoadingState message="Restoring your session..." />;
     }
 
-    return user ? <DashboardPage /> : <AuthPage />;
+    return user ? <AuthenticatedApp /> : <AuthPage />;
 }
