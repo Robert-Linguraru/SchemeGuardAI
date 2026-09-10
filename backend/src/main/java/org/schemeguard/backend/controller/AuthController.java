@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.schemeguard.backend.dto.AuthResponse;
 import org.schemeguard.backend.dto.LoginRequest;
 import org.schemeguard.backend.dto.RegisterRequest;
+import org.schemeguard.backend.entity.User;
 import org.schemeguard.backend.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +32,23 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest request
     ) {
-        return ResponseEntity.ok(authService.login(request));
+        return ResponseEntity.ok(
+                authService.login(request)
+        );
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<AuthResponse> me(
+            @AuthenticationPrincipal User user
+    ) {
+        return ResponseEntity.ok(
+                new AuthResponse(
+                        null,
+                        user.getId(),
+                        user.getEmail(),
+                        user.getFullName(),
+                        user.getStatus()
+                )
+        );
     }
 }
