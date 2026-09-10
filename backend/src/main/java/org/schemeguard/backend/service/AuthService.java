@@ -1,10 +1,10 @@
 package org.schemeguard.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.schemeguard.backend.dto.AuthResponse;
-import org.schemeguard.backend.dto.LoginRequest;
-import org.schemeguard.backend.dto.RegisterRequest;
-import org.schemeguard.backend.dto.Role;
+import org.schemeguard.backend.dto.AccountManagement.AuthResponse;
+import org.schemeguard.backend.dto.AccountManagement.LoginRequest;
+import org.schemeguard.backend.dto.AccountManagement.RegisterRequest;
+import org.schemeguard.backend.entity.Role;
 import org.schemeguard.backend.entity.User;
 import org.schemeguard.backend.exception.ConflictException;
 import org.schemeguard.backend.exception.UnauthorizedException;

@@ -1,6 +1,6 @@
 package org.schemeguard.backend.repository;
 
-import org.schemeguard.backend.dto.Role;
+import org.schemeguard.backend.entity.Role;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

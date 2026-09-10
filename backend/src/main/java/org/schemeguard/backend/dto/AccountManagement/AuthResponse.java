@@ -1,4 +1,4 @@
-package org.schemeguard.backend.dto;
+package org.schemeguard.backend.dto.AccountManagement;
 
 import java.util.UUID;
 

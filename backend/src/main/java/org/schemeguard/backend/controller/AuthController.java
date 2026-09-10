@@ -2,9 +2,9 @@ package org.schemeguard.backend.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.schemeguard.backend.dto.AuthResponse;
-import org.schemeguard.backend.dto.LoginRequest;
-import org.schemeguard.backend.dto.RegisterRequest;
+import org.schemeguard.backend.dto.AccountManagement.AuthResponse;
+import org.schemeguard.backend.dto.AccountManagement.LoginRequest;
+import org.schemeguard.backend.dto.AccountManagement.RegisterRequest;
 import org.schemeguard.backend.entity.User;
 import org.schemeguard.backend.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -12,17 +12,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
+    private final Logger logger = Logger.getLogger(AuthController.class.getName());
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
+        logger.info(request.email());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authService.register(request));

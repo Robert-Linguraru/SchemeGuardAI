@@ -126,16 +126,16 @@ CREATE TABLE ml_predictions (
 );
 
 CREATE TABLE processing_jobs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    job_type VARCHAR(30) NOT NULL CHECK (job_type IN ('CSV_IMPORT', 'BULK_EVALUATION')),
-    file_name VARCHAR(255),
-    status VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'RUNNING', 'COMPLETED', 'FAILED')),
-    total_records INTEGER NOT NULL DEFAULT 0 CHECK (total_records >= 0),
-    processed_records INTEGER NOT NULL DEFAULT 0 CHECK (processed_records >= 0),
-    failed_records INTEGER NOT NULL DEFAULT 0 CHECK (failed_records >= 0),
-    error_message TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    completed_at TIMESTAMPTZ
+     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+     job_type VARCHAR(30) NOT NULL CHECK (job_type IN ('CSV_IMPORT', 'BULK_EVALUATION')),
+     file_name VARCHAR(255),
+     status VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'RUNNING', 'COMPLETED', 'FAILED')),
+     total_records INTEGER NOT NULL DEFAULT 0 CHECK (total_records >= 0),
+     processed_records INTEGER NOT NULL DEFAULT 0 CHECK (processed_records >= 0),
+     failed_records INTEGER NOT NULL DEFAULT 0 CHECK (failed_records >= 0),
+     error_message TEXT,
+     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+     completed_at TIMESTAMPTZ
 );
 
 CREATE TABLE audit_logs (
