@@ -1,25 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { uploadRule } from "../api/rulesApi";
 import { RuleConditionFields } from "./RuleConditionFields";
-import type { RuleCondition, RuleUploadRequest, RuleUploadResponse } from "../types/rule";
+import type { RuleCondition, RuleFormValues, RuleUploadResponse } from "../types/rule";
 
 interface RuleFormProps {
     onSuccess: (response: RuleUploadResponse) => void;
-}
-
-interface RuleFormValues {
-    schemeId: string;
-    ruleCode: string;
-    ruleName: string;
-    region: string;
-    priority: string;
-    qualificationCategory: string;
-    interchangeRate: string;
-    feeType: string;
-    effectiveFrom: string;
-    effectiveTo: string;
-    version: string;
-    active: boolean;
 }
 
 const initialValues: RuleFormValues = {
@@ -28,6 +13,7 @@ const initialValues: RuleFormValues = {
     ruleName: "",
     region: "EU",
     priority: "0",
+    conditions: [],
     qualificationCategory: "",
     interchangeRate: "0",
     feeType: "PERCENTAGE",
@@ -41,16 +27,6 @@ const initialConditions: RuleCondition[] = [{ field: "", operator: "", value: ""
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const booleanFields = new Set(["merchantDataComplete", "threeDsUsed", "cvvPresent"]);
 const numericFields = new Set(["clearingDelayMaxDays"]);
-
-const valueForRequest = (condition: RuleCondition): unknown => {
-    if (booleanFields.has(condition.field)) {
-        return String(condition.value).toLowerCase() === "true";
-    }
-    if (numericFields.has(condition.field)) {
-        return Number(condition.value);
-    }
-    return condition.value;
-};
 
 export function RuleForm({ onSuccess }: RuleFormProps) {
     const [values, setValues] = useState(initialValues);
@@ -109,27 +85,11 @@ export function RuleForm({ onSuccess }: RuleFormProps) {
         setErrors(validationErrors);
         if (validationErrors.length > 0) return;
 
-        const payload: RuleUploadRequest = {
-            scheme_id: values.schemeId.trim(),
-            ruleCode: values.ruleCode.trim(),
-            ruleName: values.ruleName.trim(),
-            region: values.region,
-            priority: Number(values.priority),
-            conditions: { all: conditions.map((condition) => ({ ...condition, value: valueForRequest(condition) })) },
-            result: {
-                qualificationCategory: values.qualificationCategory.trim(),
-                interchangeRate: Number(values.interchangeRate),
-                feeType: values.feeType.trim()
-            },
-            effectiveFrom: values.effectiveFrom,
-            effectiveTo: values.effectiveTo || null,
-            version: Number(values.version),
-            active: values.active
-        };
+        const formValues: RuleFormValues = { ...values, conditions };
 
         setIsSubmitting(true);
         try {
-            const response = await uploadRule(payload);
+            const response = await uploadRule(formValues);
             onSuccess(response);
         } catch (error) {
             setRequestError(error instanceof Error ? error.message : "Could not create the rule.");
