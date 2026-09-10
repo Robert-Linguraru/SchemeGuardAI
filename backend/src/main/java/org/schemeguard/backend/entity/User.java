@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.schemeguard.backend.dto.Role;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;

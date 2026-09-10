@@ -1,6 +1,6 @@
 package org.schemeguard.backend.controller;
 
-import org.schemeguard.backend.dto.Role;
+import org.schemeguard.backend.entity.Role;
 import org.schemeguard.backend.repository.RolesRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,11 +28,9 @@ public class MainController {
     public Iterable<Role> getRole(
             @RequestParam(required = false) String name
     ) {
-        logger.info(name);
         if(name == null) {
             return rolesRepository.findAll();
         }
         return List.of(rolesRepository.findRoleByName(name));
     }
-
 }

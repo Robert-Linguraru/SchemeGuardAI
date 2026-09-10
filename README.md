@@ -2,22 +2,49 @@
 ```json
 
 {
-  "rule_id": "MC_EU_CONSUMER_CREDIT_POS",
-  "network": "MASTERCARD",
+  "scheme_id": "8c6d8f90-6b3f-4c7b-9b4a-111111111111",
+  "rule_code": "MC_EU_CONSUMER_CREDIT_POS",
+  "rule_name": "Mastercard EU Consumer Credit POS",
   "region": "EU",
+  "priority": 10,
   "conditions": {
-    "card_type": "consumer_credit",
-    "channel": "pos",
-    "merchant_data_complete": true,
-    "clearing_delay_max_days": 1
+    "all": [
+      {
+        "field": "card_type",
+        "operator": "equals",
+        "value": "CREDIT"
+      },
+      {
+        "field": "card_category",
+        "operator": "equals",
+        "value": "CONSUMER"
+      },
+      {
+        "field": "channel",
+        "operator": "equals",
+        "value": "POS"
+      },
+      {
+        "field": "three_ds_used",
+        "operator": "equals",
+        "value": true
+      },
+      {
+        "field": "clearing_delay_days",
+        "operator": "less_than_or_equal",
+        "value": 1
+      }
+    ]
   },
   "result": {
-    "status": "qualified",
-    "rate": 0.0030,
-    "fee_type": "percentage"
+    "qualification_category": "EU_CONSUMER_CREDIT_POS",
+    "interchange_rate": 0.003,
+    "fee_type": "PERCENTAGE"
   },
-  "priority": 10,
-  "effective_from": "2026-01-01"
+  "effective_from": "2026-01-01",
+  "effective_to": null,
+  "version": 1,
+  "active": true
 }
 
 ```
