@@ -12,6 +12,7 @@ import tools.jackson.databind.JsonNode;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -51,7 +52,7 @@ public class Rule {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(nullable = false, columnDefinition = "jsonb")
-    private JsonNode conditions;
+    private Map<String, Object> conditions;
 
     @Column(name = "qualification_category", nullable = false, length = 100)
     private String qualificationCategory;

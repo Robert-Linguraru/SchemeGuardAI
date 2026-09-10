@@ -41,6 +41,9 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/rule/upload",
+                                "/api/rule/getRule",
+                                "/api/rule/getRules",
+                                "/api/rule/delete",
                                 "/test",
                                 "/error"
                         )
