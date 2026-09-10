@@ -20,13 +20,11 @@ import java.util.logging.Logger;
 public class AuthController {
 
     private final AuthService authService;
-    private final Logger logger = Logger.getLogger(AuthController.class.getName());
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
-        logger.info(request.email());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authService.register(request));
