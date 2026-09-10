@@ -6,6 +6,7 @@ import type { Transaction } from "../../../shared/types/transaction";
 import { getMockTransactions } from "../api/transactionsApi";
 import { TransactionStats } from "../components/TransactionStats";
 import { TransactionTable } from "../components/TransactionTable";
+import CsvTransactionUploadModal from "../../csvUpload/components/csvUploadModal";
 
 export function DashboardPage() {
     const { user, logout } = useAuth();
@@ -57,7 +58,10 @@ export function DashboardPage() {
             <section className="content">
                 <div className="page-heading">
                     <div><p className="eyebrow">PAYMENTS WORKSPACE</p><h2>Transaction overview</h2><p>Monitor interchange qualification and fees.</p></div>
-                    <span className="role-badge">{user?.status} · MERCHANT</span>
+                    <div className="page-heading-actions">
+                        <CsvTransactionUploadModal />
+                        <span className="role-badge">{user?.status} · MERCHANT</span>
+                    </div>
                 </div>
                 <TransactionStats transactions={transactions} />
                 <section className="transactions-card">

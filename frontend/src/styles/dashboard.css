@@ -50,6 +50,14 @@
 	gap: 20px;
 }
 
+.page-heading-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
 .page-heading h2,
 .section-header h2 {
 	margin: 4px 0 8px;
