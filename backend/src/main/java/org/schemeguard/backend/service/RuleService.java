@@ -6,10 +6,12 @@ import org.schemeguard.backend.entity.CardScheme;
 import org.schemeguard.backend.entity.Rule;
 import org.schemeguard.backend.repository.CardSchemeRepository;
 import org.schemeguard.backend.repository.RuleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -17,11 +19,10 @@ public class RuleService {
 
     private final RuleRepository ruleRepository;
     private final CardSchemeRepository cardSchemeRepository;
-    private final ObjectMapper objectMapper;
 
     public Rule createRule(RuleRequestDto dto) {
         CardScheme scheme = cardSchemeRepository
-                .findById(dto.getScheme_id())
+                .findById(dto.getSchemeId())
                 .orElseThrow(() -> new RuntimeException("Card scheme not found")); //todo create exception
 
         Rule rule = new Rule();
@@ -32,8 +33,7 @@ public class RuleService {
         rule.setRegion(dto.getRegion());
         rule.setPriority(dto.getPriority());
 
-        JsonNode conditionsJson = objectMapper.valueToTree(dto.getConditions());
-        rule.setConditions(conditionsJson);
+        rule.setConditions(dto.getConditions());
 
         rule.setQualificationCategory(
                 dto.getResult().getQualificationCategory()
@@ -47,5 +47,26 @@ public class RuleService {
         rule.setActive(dto.isActive());
 
         return ruleRepository.save(rule);
+    }
+
+    public Rule getRuleById(UUID id) {
+        return ruleRepository.findRuleById(id);
+    }
+
+    public Iterable<Rule> getAllRules() {
+        return ruleRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteRule(UUID id) {
+        if (!ruleRepository.existsById(id)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Rule not found"
+            );
+        }
+
+        ruleRepository.deleteById(id);
     }
 }

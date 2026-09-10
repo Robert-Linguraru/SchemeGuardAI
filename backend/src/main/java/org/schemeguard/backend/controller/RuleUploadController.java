@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/api/rule")
@@ -26,46 +27,54 @@ public class RuleUploadController {
         this.ruleService = ruleService;
     }
 
+    private RuleResponseDto toResponseDto(Rule rule) {
+        return new RuleResponseDto(
+                rule.getId(),
+                rule.getRuleCode(),
+                rule.getRuleName(),
+                rule.getQualificationCategory(),
+                rule.getInterchangeRate()
+        );
+    }
+
     @PostMapping("/upload")
     private ResponseEntity<RuleResponseDto> uploadRule(
             @Valid @RequestBody RuleRequestDto ruleRequestDto
     ) {
-        Rule savedRule = ruleService.createRule(ruleRequestDto);
-
-        RuleResponseDto response = new RuleResponseDto(
-                savedRule.getId(),
-                savedRule.getRuleCode(),
-                savedRule.getRuleName(),
-                savedRule.getQualificationCategory(),
-                savedRule.getInterchangeRate()
-        );
+        Rule response = ruleService.createRule(ruleRequestDto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(response);
+                .body(toResponseDto(response));
     }
 
     @GetMapping("/getRule")
-    private RuleRequestDto getRule(
+    private ResponseEntity<RuleResponseDto> getRule(
             @RequestParam UUID id
     ) {
-        //todo
-        return null;
+        Rule response = ruleService.getRuleById(id);
+
+        return ResponseEntity.ok(toResponseDto(response));
     }
 
     @GetMapping("/getRules")
-    private List<RuleRequestDto> getRules() {
-        //todo
-        return List.of(null);
+    private ResponseEntity<List<RuleResponseDto>> getRules() {
+        var rules = ruleService.getAllRules();
+
+        List<RuleResponseDto> response = StreamSupport
+                .stream(rules.spliterator(), false)
+                .map(this::toResponseDto)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/delete")
-    private ResponseEntity<String> deleteRule(
+    private ResponseEntity<Void> deleteRule(
             @RequestParam UUID id
     ) {
-        //todo
-        return ResponseEntity.ok(
-                "deleted"
-        );
+        ruleService.deleteRule(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
