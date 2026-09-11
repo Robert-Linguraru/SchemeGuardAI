@@ -49,10 +49,16 @@ public class RuleService {
         return ruleRepository.save(rule);
     }
 
+    @Transactional(readOnly = true)
     public Rule getRuleById(UUID id) {
-        return ruleRepository.findRuleById(id);
+        return ruleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Rule not found"
+                ));
     }
 
+    @Transactional(readOnly = true)
     public Iterable<Rule> getAllRules() {
         return ruleRepository.findAll();
     }

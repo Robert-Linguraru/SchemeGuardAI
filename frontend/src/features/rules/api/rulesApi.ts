@@ -1,7 +1,9 @@
 import { request } from "../../../shared/api/httpClient";
 import type {
     RuleCondition,
+    RuleDetailsResponse,
     RuleFormValues,
+    RuleListResponse,
     RuleUploadRequest,
     RuleUploadResponse
 } from "../types/rule";
@@ -44,3 +46,19 @@ export const uploadRule = (
         method: "POST",
         body: JSON.stringify(toRuleUploadRequest(rule))
     });
+
+export const getRules = (): Promise<RuleListResponse[]> =>
+    request<RuleListResponse[]>("/api/rule/getRules");
+
+export const getRule = (id: string): Promise<RuleDetailsResponse> =>
+    request<RuleDetailsResponse>(
+        `/api/rule/getRule?id=${encodeURIComponent(id)}`
+    );
+
+export const deleteRule = (id: string): Promise<void> =>
+    request<void>(
+        `/api/rule/delete?id=${encodeURIComponent(id)}`,
+        {
+            method: "POST"
+        }
+    );
