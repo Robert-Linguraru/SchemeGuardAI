@@ -49,3 +49,24 @@ export interface RuleUploadResponse {
     qualificationCategory: string;
     interchangeRate: number;
 }
+
+export interface RuleListResponse {
+    id: string;
+    ruleCode: string;
+    ruleName: string;
+    schemeCode: string;
+    schemeName: string;
+    region: string;
+    qualificationCategory: string;
+    interchangeRate: number;
+    priority: number;
+    version: number;
+    active: boolean;
+    effectiveFrom: string;
+    effectiveTo: string | null;
+}
+
+export interface RuleDetailsResponse extends RuleListResponse {
+    conditions: RuleConditions;
+    createdAt: string;
+}
