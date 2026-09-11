@@ -2,19 +2,21 @@ import { useState } from "react";
 import { useAuth } from "../../../app/AuthProvider";
 import { RuleForm } from "../components/RuleForm";
 import type { RuleUploadResponse } from "../types/rule";
+import { AccountMenu } from "../../../shared/components/AccountMenu";
 
 interface RuleUploadPageProps {
     onBack: () => void;
+    onEditProfile: () => void;
 }
 
-export function RuleUploadPage({ onBack }: RuleUploadPageProps) {
-    const { user, logout } = useAuth();
+export function RuleUploadPage({ onBack, onEditProfile }: RuleUploadPageProps) {
+    const { user } = useAuth();
     const [createdRule, setCreatedRule] = useState<RuleUploadResponse | null>(null);
 
     return (
         <main className="dashboard rules-page">
             <header className="dashboard-header">
-                <div className="header-actions"><div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div><button className="logout-button" onClick={logout}>Logout</button></div>
+                <div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div><AccountMenu onEditProfile={onEditProfile} />
             </header>
             <section className="content">
                 <div className="page-heading"><div><p className="eyebrow">RULES WORKSPACE</p><h2>Create a qualification rule</h2><p>Define the conditions and outcome the backend should apply to transactions.</p></div><button className="secondary-button page-nav-button" onClick={onBack}>Transaction dashboard</button></div>

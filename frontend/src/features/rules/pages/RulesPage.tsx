@@ -2,19 +2,22 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../app/AuthProvider";
 import { deleteRule, getRules } from "../api/rulesApi";
 import type { RuleListResponse } from "../types/rule";
+import { AccountMenu } from "../../../shared/components/AccountMenu";
 
 interface RulesPageProps {
     onBack: () => void;
     onCreateRule: () => void;
     onOpenRule: (id: string) => void;
+    onEditProfile: () => void;
 }
 
 export function RulesPage({
                               onBack,
                               onCreateRule,
-                              onOpenRule
+                              onOpenRule,
+                              onEditProfile
                           }: RulesPageProps) {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const [rules, setRules] = useState<RuleListResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -64,19 +67,11 @@ export function RulesPage({
     return (
         <main className="dashboard rules-page">
             <header className="dashboard-header">
-                <div className="header-actions">
-                    <div className="welcome">
+                <div className="welcome">
                         <h1>SchemeGuard AI</h1>
                         <p>Welcome, {user?.fullName}</p>
-                    </div>
-
-                    <button
-                        className="logout-button"
-                        onClick={logout}
-                    >
-                        Logout
-                    </button>
                 </div>
+                <AccountMenu onEditProfile={onEditProfile} />
             </header>
 
             <section className="content">

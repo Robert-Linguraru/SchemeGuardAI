@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../app/AuthProvider";
+import { AccountMenu } from "../../../shared/components/AccountMenu";
 import { ErrorMessage } from "../../../shared/components/ErrorMessage";
 import { LoadingState } from "../../../shared/components/LoadingState";
 import type { Transaction } from "../../../shared/types/transaction";
@@ -9,10 +10,11 @@ import { TransactionTable } from "../components/TransactionTable";
 
 interface DashboardPageProps {
     onCreateRule: () => void;
+    onEditProfile: () => void;
 }
 
-export function DashboardPage({ onCreateRule }: DashboardPageProps) {
-    const { user, logout } = useAuth();
+export function DashboardPage({ onCreateRule, onEditProfile }: DashboardPageProps) {
+    const { user } = useAuth();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -53,10 +55,8 @@ export function DashboardPage({ onCreateRule }: DashboardPageProps) {
                 <span className="orb orb-blue orb-one"></span><span className="orb orb-coral orb-two"></span><span className="orb orb-white orb-three"></span><span className="orb orb-blue orb-four"></span>
             </div>
             <header className="dashboard-header">
-                <div className="header-actions">
-                    <div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div>
-                    <button className="logout-button" onClick={logout}>Logout</button>
-                </div>
+                <div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div>
+                <AccountMenu onEditProfile={onEditProfile} />
             </header>
             <section className="content">
                 <div className="page-heading">

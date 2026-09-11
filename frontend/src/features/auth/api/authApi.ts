@@ -5,6 +5,12 @@ import type {
     RegisterRequest
 } from "../../../shared/types/auth";
 
+export interface UpdateProfileRequest {
+    email: string;
+    fullName: string;
+    password?: string;
+}
+
 export const login = (payload: LoginRequest): Promise<AuthResponse> =>
     request<AuthResponse>("/api/auth/login", {
         method: "POST",
@@ -21,3 +27,9 @@ export const register = (payload: RegisterRequest): Promise<AuthResponse> =>
 
 export const getMe = (): Promise<AuthResponse> =>
     request<AuthResponse>("/api/auth/me", { method: "GET" });
+
+export const updateProfile = (payload: UpdateProfileRequest): Promise<AuthResponse> =>
+    request<AuthResponse>("/api/auth/profile", {
+        method: "PUT",
+        body: JSON.stringify(payload)
+    });

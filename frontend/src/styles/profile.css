@@ -1,0 +1,191 @@
+.account-menu {
+    position: relative;
+    z-index: 4;
+}
+
+.account-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 13px 8px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.account-button:hover,
+.account-button:focus-visible {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.account-avatar {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--coral);
+    color: var(--white);
+    font-size: 12px;
+}
+
+.account-chevron {
+    margin-left: 2px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1;
+}
+
+.account-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 220px;
+    overflow: hidden;
+    border-radius: 13px;
+    background: var(--white);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+    color: var(--navy);
+}
+
+.account-summary {
+    display: grid;
+    gap: 4px;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.account-summary span {
+    overflow: hidden;
+    color: #65738b;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-dropdown > button {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--white);
+    color: var(--navy);
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.account-dropdown > button:hover,
+.account-dropdown > button:focus-visible {
+    background: #f1f6f8;
+}
+
+.profile-heading {
+    margin: 30px 0 20px;
+}
+
+.profile-heading h2 {
+    margin: 5px 0 8px;
+    font-size: 30px;
+}
+
+.profile-heading > p:last-child,
+.profile-card-heading p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.profile-card {
+    width: min(100%, 760px);
+    padding: 28px;
+    border-radius: 18px;
+    background: var(--white);
+    color: var(--navy);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
+}
+
+.profile-card-heading h3 {
+    margin: 0 0 6px;
+    font-size: 19px;
+}
+
+.profile-card-heading p {
+    font-size: 13px;
+}
+
+.profile-card label {
+    margin-top: 22px;
+}
+
+.password-input {
+    position: relative;
+}
+
+.password-input input {
+    padding-right: 70px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    padding: 6px 8px;
+    transform: translateY(-50%);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--navy-light);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.password-toggle:hover {
+    background: #edf3f6;
+}
+
+.profile-divider {
+    height: 1px;
+    margin: 28px 0;
+    background: var(--border);
+}
+
+.profile-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    margin-top: 28px;
+}
+
+.profile-saved {
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.save-profile-button {
+    padding: 12px 18px;
+    border-radius: 8px;
+    background: var(--coral);
+    color: var(--white);
+    font-weight: 700;
+}
+
+.save-profile-button:hover {
+    background: #ff7168;
+}
+
+@media (max-width: 600px) {
+    .account-dropdown {
+        right: -4px;
+    }
+
+    .profile-card {
+        padding: 20px;
+    }
+
+    .profile-form-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
