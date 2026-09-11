@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../app/AuthProvider";
+import { AccountMenu } from "../../../shared/components/AccountMenu";
 import { ErrorMessage } from "../../../shared/components/ErrorMessage";
 import { LoadingState } from "../../../shared/components/LoadingState";
 import type { Transaction } from "../../../shared/types/transaction";
@@ -8,8 +9,13 @@ import { TransactionStats } from "../components/TransactionStats";
 import { TransactionTable } from "../components/TransactionTable";
 import CsvTransactionUploadModal from "../../csvUpload/components/csvUploadModal";
 
-export function DashboardPage() {
-    const { user, logout } = useAuth();
+interface DashboardPageProps {
+    onCreateRule: () => void;
+    onEditProfile: () => void;
+}
+
+export function DashboardPage({ onCreateRule, onEditProfile }: DashboardPageProps) {
+    const { user } = useAuth();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -50,10 +56,8 @@ export function DashboardPage() {
                 <span className="orb orb-blue orb-one"></span><span className="orb orb-coral orb-two"></span><span className="orb orb-white orb-three"></span><span className="orb orb-blue orb-four"></span>
             </div>
             <header className="dashboard-header">
-                <div className="header-actions">
-                    <div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div>
-                    <button className="logout-button" onClick={logout}>Logout</button>
-                </div>
+                <div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div>
+                <AccountMenu onEditProfile={onEditProfile} />
             </header>
             <section className="content">
                 <div className="page-heading">
@@ -62,6 +66,7 @@ export function DashboardPage() {
                         <CsvTransactionUploadModal />
                         <span className="role-badge">{user?.status} · MERCHANT</span>
                     </div>
+                    <div className="heading-actions"><span className="role-badge">{user?.status} · MERCHANT</span><button className="create-rule-button" onClick={onCreateRule}>Create rule</button></div>
                 </div>
                 <TransactionStats transactions={transactions} />
                 <section className="transactions-card">

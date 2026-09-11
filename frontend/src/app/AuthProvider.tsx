@@ -5,7 +5,7 @@ import {
     useState,
     type ReactNode
 } from "react";
-import { getMe, login as loginRequest, register as registerRequest } from "../features/auth/api/authApi";
+import { getMe, login as loginRequest, register as registerRequest, updateProfile as updateProfileRequest } from "../features/auth/api/authApi";
 import {
     clearAccessToken,
     getAccessToken,
@@ -23,6 +23,7 @@ interface AuthContextValue {
     error: string | null;
     login: (payload: LoginRequest) => Promise<void>;
     register: (payload: RegisterRequest) => Promise<void>;
+    updateProfile: (payload: { fullName: string; email: string; password?: string }) => Promise<void>;
     logout: () => void;
 }
 
@@ -93,6 +94,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (payload: LoginRequest) => authenticate(() => loginRequest(payload));
     const register = (payload: RegisterRequest) => authenticate(() => registerRequest(payload));
+    const updateProfile = async (payload: { fullName: string; email: string; password?: string }) => {
+        setError(null);
+        try {
+            const response = await updateProfileRequest(payload);
+            setUser(toUser(response));
+        } catch (profileError) {
+            const message = profileError instanceof Error
+                ? profileError.message
+                : "Could not update profile";
+            setError(message);
+            throw profileError;
+        }
+    };
     const logout = () => {
         clearAccessToken();
         setUser(null);
@@ -100,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, error, login, register, logout }}>
+        <AuthContext.Provider value={{ user, isLoading, error, login, register, updateProfile, logout }}>
             {children}
         </AuthContext.Provider>
     );

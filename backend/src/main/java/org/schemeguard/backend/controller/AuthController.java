@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.schemeguard.backend.dto.AccountManagement.AuthResponse;
 import org.schemeguard.backend.dto.AccountManagement.LoginRequest;
 import org.schemeguard.backend.dto.AccountManagement.RegisterRequest;
+import org.schemeguard.backend.dto.AccountManagement.UpdateProfileRequest;
 import org.schemeguard.backend.entity.User;
 import org.schemeguard.backend.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -52,5 +53,13 @@ public class AuthController {
                         user.getStatus()
                 )
         );
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<AuthResponse> updateProfile(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody UpdateProfileRequest request
+    ) {
+        return ResponseEntity.ok(authService.updateProfile(user, request));
     }
 }

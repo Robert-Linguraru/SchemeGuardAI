@@ -10,16 +10,20 @@
 .dashboard-header,
 .content {
 	position: relative;
-	z-index: 2;
 	max-width: 1240px;
 	margin: 0 auto;
 }
 
 .dashboard-header {
+	z-index: 10;
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 24px;
+}
+
+.content {
+	z-index: 1;
 }
 
 .header-actions {
@@ -39,7 +43,7 @@
 }
 
 .content {
-	margin-top: 55px;
+	margin-top: 90px;
 }
 
 .page-heading,
@@ -200,6 +204,10 @@ tbody tr:hover {
 	.page-heading {
 		align-items: flex-start;
 		flex-direction: column;
+	}
+
+	.content {
+		margin-top: 55px;
 	}
 
 	.header-actions {

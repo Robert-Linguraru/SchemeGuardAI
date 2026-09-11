@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.schemeguard.backend.dto.AccountManagement.AuthResponse;
 import org.schemeguard.backend.dto.AccountManagement.LoginRequest;
 import org.schemeguard.backend.dto.AccountManagement.RegisterRequest;
+import org.schemeguard.backend.dto.AccountManagement.UpdateProfileRequest;
 import org.schemeguard.backend.entity.Role;
 import org.schemeguard.backend.entity.User;
 import org.schemeguard.backend.exception.ConflictException;
@@ -84,6 +85,26 @@ public class AuthService {
         }
 
         return toAuthResponse(user);
+    }
+
+    @Transactional
+    public AuthResponse updateProfile(User user, UpdateProfileRequest request) {
+        String email = request.email().trim().toLowerCase();
+
+        userRepository.findByEmailIgnoreCase(email)
+                .filter(existingUser -> !existingUser.getId().equals(user.getId()))
+                .ifPresent(existingUser -> {
+                    throw new ConflictException("Email is already registered");
+                });
+
+        user.setEmail(email);
+        user.setFullName(request.fullName().trim());
+
+        if (request.password() != null && !request.password().isBlank()) {
+            user.setPasswordHash(passwordEncoder.encode(request.password()));
+        }
+
+        return toAuthResponse(userRepository.save(user));
     }
 
     private AuthResponse toAuthResponse(User user) {
