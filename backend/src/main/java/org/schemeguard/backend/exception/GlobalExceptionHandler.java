@@ -18,12 +18,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiError> handleDatabaseError(
-            DataIntegrityViolationException exception
+            DataIntegrityViolationException exception,
+            HttpServletRequest request
     ) {
-        logger.info("INTRA PE EXCEPTIA ASTA");
         return buildError(
                 HttpStatus.CONFLICT,
-                "Database constraint violation: " + exception.getMessage()
+                request.getRequestURI().startsWith("/api/rule")
+                        ? "A rule with this code already exists."
+                        : "The request could not be completed."
         );
     }
 
@@ -34,8 +36,20 @@ public class GlobalExceptionHandler {
     ) {
         return buildError(
                 HttpStatus.BAD_REQUEST,
-                "Invalid request data"
+                request.getRequestURI().startsWith("/api/rule")
+                        ? "Some rule fields are invalid. Please review the form."
+                        : "Invalid request data"
         );
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiError> handleResourceNotFound(
+            ResourceNotFoundException exception
+    ) {
+        String errorCode = exception.getMessage().startsWith("Card scheme")
+                ? "CARD_SCHEME_NOT_FOUND"
+                : "RULE_NOT_FOUND";
+        return buildError(HttpStatus.NOT_FOUND, exception.getMessage(), errorCode);
     }
 
     @ExceptionHandler(ConflictException.class)
@@ -62,12 +76,22 @@ public class GlobalExceptionHandler {
             HttpStatus status,
             String message
     ) {
+        return buildError(status, message, null);
+    }
+
+    private ResponseEntity<ApiError> buildError(
+            HttpStatus status,
+            String message,
+            String errorCode
+    ) {
         return ResponseEntity
                 .status(status)
                 .body(new ApiError(
                         status.value(),
                         message,
-                        OffsetDateTime.now()
+                        OffsetDateTime.now(),
+                        errorCode,
+                        null
                 ));
     }
 }

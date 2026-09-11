@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../app/AuthProvider";
 import { deleteRule, getRule } from "../api/rulesApi";
+import { getRuleErrorMessage } from "../api/ruleErrors";
 import type {
     RuleCondition,
     RuleDetailsResponse
@@ -42,11 +43,7 @@ export function RuleDetailsPage({
         getRule(ruleId)
             .then(setRule)
             .catch((error) => {
-                setError(
-                    error instanceof Error
-                        ? error.message
-                        : "Could not load rule."
-                );
+                setError(getRuleErrorMessage(error));
             });
     }, [ruleId]);
 
@@ -59,11 +56,7 @@ export function RuleDetailsPage({
             await deleteRule(ruleId);
             onDeleted();
         } catch (error) {
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : "Could not delete rule."
-            );
+            setError(getRuleErrorMessage(error));
         }
     };
 
