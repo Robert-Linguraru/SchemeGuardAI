@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.schemeguard.backend.dto.Rule.RuleRequestDto;
 import org.schemeguard.backend.entity.CardScheme;
 import org.schemeguard.backend.entity.Rule;
+import org.schemeguard.backend.exception.ConflictException;
+import org.schemeguard.backend.exception.ResourceNotFoundException;
 import org.schemeguard.backend.repository.CardSchemeRepository;
 import org.schemeguard.backend.repository.RuleRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -23,7 +23,12 @@ public class RuleService {
     public Rule createRule(RuleRequestDto dto) {
         CardScheme scheme = cardSchemeRepository
                 .findById(dto.getSchemeId())
-                .orElseThrow(() -> new RuntimeException("Card scheme not found")); //todo create exception
+            .orElseThrow(() -> new ResourceNotFoundException("Card scheme not found"));
+
+        if (ruleRepository.existsBySchemeIdAndRuleCodeAndVersion(
+            dto.getSchemeId(), dto.getRuleCode(), dto.getVersion())) {
+            throw new ConflictException("A rule with this code already exists.");
+        }
 
         Rule rule = new Rule();
 
@@ -52,10 +57,7 @@ public class RuleService {
     @Transactional(readOnly = true)
     public Rule getRuleById(UUID id) {
         return ruleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Rule not found"
-                ));
+            .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
     }
 
     @Transactional(readOnly = true)
@@ -66,11 +68,7 @@ public class RuleService {
     @Transactional
     public void deleteRule(UUID id) {
         if (!ruleRepository.existsById(id)) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Rule not found"
-            );
+            throw new ResourceNotFoundException("Rule not found");
         }
 
         ruleRepository.deleteById(id);

@@ -11,6 +11,8 @@ import java.util.UUID;
 
 public interface RuleRepository extends CrudRepository<Rule, UUID> {
 
+    boolean existsBySchemeIdAndRuleCodeAndVersion(UUID schemeId, String ruleCode, int version);
+
     @EntityGraph(attributePaths = "scheme")
     Optional<Rule> findById(UUID id);
 

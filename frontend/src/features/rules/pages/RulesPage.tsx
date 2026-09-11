@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../app/AuthProvider";
 import { deleteRule, getRules } from "../api/rulesApi";
+import { getRuleErrorMessage } from "../api/ruleErrors";
 import type { RuleListResponse } from "../types/rule";
 import { AccountMenu } from "../../../shared/components/AccountMenu";
 
@@ -29,11 +30,7 @@ export function RulesPage({
             const result = await getRules();
             setRules(result);
         } catch (error) {
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : "Could not load rules."
-            );
+            setError(getRuleErrorMessage(error));
         } finally {
             setLoading(false);
         }
@@ -56,11 +53,7 @@ export function RulesPage({
                 currentRules.filter((rule) => rule.id !== id)
             );
         } catch (error) {
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : "Could not delete rule."
-            );
+            setError(getRuleErrorMessage(error));
         }
     };
 

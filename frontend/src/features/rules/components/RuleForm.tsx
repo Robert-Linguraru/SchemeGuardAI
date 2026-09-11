@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { uploadRule } from "../api/rulesApi";
+import { getRuleErrorMessage } from "../api/ruleErrors";
 import { RuleConditionFields } from "./RuleConditionFields";
 import type { RuleCondition, RuleFormValues, RuleUploadResponse } from "../types/rule";
 
@@ -92,7 +93,7 @@ export function RuleForm({ onSuccess }: RuleFormProps) {
             const response = await uploadRule(formValues);
             onSuccess(response);
         } catch (error) {
-            setRequestError(error instanceof Error ? error.message : "Could not create the rule.");
+            setRequestError(getRuleErrorMessage(error));
         } finally {
             setIsSubmitting(false);
         }
