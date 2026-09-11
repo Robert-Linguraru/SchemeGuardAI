@@ -5,6 +5,7 @@ import { AuthProvider } from "./app/AuthProvider";
 import "./styles/global.css";
 import "./styles/auth.css";
 import "./styles/dashboard.css";
+import "./styles/csv-transaction-upload.css";
 import "./styles/rules.css";
 import "./styles/profile.css";
 
