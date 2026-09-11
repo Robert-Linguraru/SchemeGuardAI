@@ -57,16 +57,18 @@ export function DashboardPage({ onCreateRule, onEditProfile }: DashboardPageProp
             </div>
             <header className="dashboard-header">
                 <div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div>
-                <AccountMenu onEditProfile={onEditProfile} />
+                <div className="dashboard-account-actions">
+                    <span className="role-badge">{user?.status} · MERCHANT</span>
+                    <AccountMenu onEditProfile={onEditProfile} />
+                </div>
             </header>
             <section className="content">
                 <div className="page-heading">
                     <div><p className="eyebrow">PAYMENTS WORKSPACE</p><h2>Transaction overview</h2><p>Monitor interchange qualification and fees.</p></div>
                     <div className="page-heading-actions">
                         <CsvTransactionUploadModal />
-                        <span className="role-badge">{user?.status} · MERCHANT</span>
+                        <button className="create-rule-button" onClick={onCreateRule}>View Rules</button>
                     </div>
-                    <div className="heading-actions"><span className="role-badge">{user?.status} · MERCHANT</span><button className="create-rule-button" onClick={onCreateRule}>Create rule</button></div>
                 </div>
                 <TransactionStats transactions={transactions} />
                 <section className="transactions-card">

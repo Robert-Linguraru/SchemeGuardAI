@@ -32,6 +32,32 @@
 	gap: 24px;
 }
 
+.dashboard-account-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+/* Keep the existing upload component and create-rule action in one visual group. */
+.dashboard:not(.rules-page) .page-heading-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.dashboard:not(.rules-page) .page-heading {
+	column-gap: 8px;
+}
+
+.dashboard:not(.rules-page) .page-heading-actions .role-badge,
+.dashboard:not(.rules-page) .page-heading > .heading-actions .role-badge {
+	display: none;
+}
+
+.dashboard:not(.rules-page) .page-heading > .heading-actions {
+	display: contents;
+}
+
 .welcome h1 {
 	margin: 0 0 6px;
 	font-size: 30px;

@@ -214,7 +214,6 @@ export default function CsvTransactionUploadModal({
           >
             <div className="transaction-upload-modal-header">
               <div>
-                <p className="eyebrow">ASYNC CSV IMPORT</p>
                 <h2 id="transaction-upload-title">Upload transactions</h2>
               </div>
               <button
@@ -228,10 +227,6 @@ export default function CsvTransactionUploadModal({
               </button>
             </div>
 
-            <p className="transaction-upload-intro">
-              The file is split into checksum-verified chunks and imported in
-              the background after all chunks arrive.
-            </p>
 
             <form
               className="transaction-upload-form"
