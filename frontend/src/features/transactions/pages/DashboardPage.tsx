@@ -24,14 +24,9 @@ export function DashboardPage({
 }: DashboardPageProps) {
     const { user } = useAuth();
 
-    const [transactions, setTransactions] =
-        useState<Transaction[]>([]);
-
-    const [isLoading, setIsLoading] =
-        useState(true);
-
-    const [error, setError] =
-        useState<string | null>(null);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const [explanation, setExplanation] =
         useState<TransactionExplanation | null>(null);
@@ -39,8 +34,7 @@ export function DashboardPage({
     const [explanationError, setExplanationError] =
         useState<string | null>(null);
 
-    const [isExplaining, setIsExplaining] =
-        useState(false);
+    const [isExplaining, setIsExplaining] = useState(false);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -85,14 +79,15 @@ export function DashboardPage({
 
     const explainTransaction = async (
         transaction: Transaction
-    ) => {
+    ): Promise<void> => {
         setExplanation(null);
         setExplanationError(null);
         setIsExplaining(true);
 
         try {
-            const result =
-                await getTransactionExplanation(transaction.id);
+            const result = await getTransactionExplanation(
+                transaction.id
+            );
 
             setExplanation(result);
         } catch (requestError: unknown) {
@@ -181,7 +176,9 @@ export function DashboardPage({
                     </div>
 
                     {isLoading && (
-                        <LoadingState message="Loading transactions..." />
+                        <LoadingState
+                            message="Loading transactions..."
+                        />
                     )}
 
                     {error && (
@@ -194,7 +191,9 @@ export function DashboardPage({
                     {!isLoading &&
                         !error &&
                         transactions.length === 0 && (
-                            <LoadingState message="No transactions available." />
+                            <LoadingState
+                                message="No transactions available."
+                            />
                         )}
 
                     {!isLoading &&
@@ -207,7 +206,9 @@ export function DashboardPage({
                         )}
 
                     {isExplaining && (
-                        <LoadingState message="Qwen is generating the explanation..." />
+                        <LoadingState
+                            message="Qwen is generating the explanation..."
+                        />
                     )}
 
                     {explanationError && (
@@ -216,7 +217,9 @@ export function DashboardPage({
                                 LLM explanation unavailable
                             </strong>
 
-                            <span>{explanationError}</span>
+                            <span>
+                                {explanationError}
+                            </span>
                         </div>
                     )}
 
@@ -237,11 +240,11 @@ export function DashboardPage({
 
                             <p>
                                 <strong>Fee:</strong>{" "}
-                                {explanation.estimatedFee}{" "}
+                                {explanation.interchangeFee ?? "—"}{" "}
                                 {explanation.currencyCode}
                             </p>
 
-                            <p>
+                            <p className="explanation-text">
                                 {explanation.llmExplanation}
                             </p>
 

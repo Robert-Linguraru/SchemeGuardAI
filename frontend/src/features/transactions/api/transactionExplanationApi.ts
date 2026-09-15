@@ -4,9 +4,11 @@ export interface TransactionExplanation {
     transactionId: string;
     externalId: string;
     qualificationStatus: string;
+    qualificationCategory: string | null;
     originalExplanation: string | null;
     llmExplanation: string;
-    estimatedFee: number | string | null;
+    interchangeRate: number | string | null;
+    interchangeFee: number | string | null;
     currencyCode: string;
 }
 
