@@ -10,12 +10,12 @@ const fieldOptions = [
     "cardCategory",
     "channel",
     "merchantDataComplete",
-    "clearingDelayMaxDays",
+    "clearingDelayDays",
     "threeDsUsed",
     "cvvPresent"
 ];
 
-const operatorOptions = ["EQUALS", "NOT_EQUALS", "GREATER_THAN", "LESS_THAN"];
+const operatorOptions = ["EQUALS", "NOT_EQUALS", "GREATER_THAN", "LESS_THAN", "GREATER_OR_EQUAL_THAN", "LESS_OR_EQUAL_THAN"];
 
 export function RuleConditionFields({ conditions, onChange }: RuleConditionFieldsProps) {
     const updateCondition = (index: number, changes: Partial<RuleCondition>) => {
@@ -31,7 +31,6 @@ export function RuleConditionFields({ conditions, onChange }: RuleConditionField
     return (
         <fieldset className="conditions-fieldset">
             <legend>Conditions</legend>
-            <p className="field-help">Every condition is combined in the backend as an item in <code>conditions.all</code>.</p>
             <div className="condition-list">
                 {conditions.map((condition, index) => (
                     <div className="condition-row" key={`${index}-${condition.field}`}>

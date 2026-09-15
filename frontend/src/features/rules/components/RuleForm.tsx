@@ -27,7 +27,7 @@ const initialValues: RuleFormValues = {
 const initialConditions: RuleCondition[] = [{ field: "", operator: "", value: "" }];
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const booleanFields = new Set(["merchantDataComplete", "threeDsUsed", "cvvPresent"]);
-const numericFields = new Set(["clearingDelayMaxDays"]);
+const numericFields = new Set(["clearingDelayDays"]);
 
 export function RuleForm({ onSuccess }: RuleFormProps) {
     const [values, setValues] = useState(initialValues);

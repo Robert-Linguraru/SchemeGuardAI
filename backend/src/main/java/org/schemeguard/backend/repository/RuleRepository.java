@@ -13,6 +13,13 @@ public interface RuleRepository extends CrudRepository<Rule, UUID> {
 
     boolean existsBySchemeIdAndRuleCodeAndVersion(UUID schemeId, String ruleCode, int version);
 
+    //todo
+    @EntityGraph(attributePaths = "scheme")
+    @Query("SELECT r FROM Rule r")
+    Iterable<Rule> filterApplicableRules(
+            UUID scheme_id
+    );
+
     @EntityGraph(attributePaths = "scheme")
     Optional<Rule> findById(UUID id);
 
