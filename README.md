@@ -1,12 +1,13 @@
 ﻿# SchemeGuardAI
 
-SchemeGuardAI is a application for managing card-scheme rules, with planned support for transaction qualification and interchange fee analysis.
+SchemeGuardAI manages card-scheme rules, qualifies imported transactions, and calculates interchange fees.
 
 ## Main features
 
 - **Accounts:** registration, login, and profile updates.
 - **Rules:** create, list, inspect, and delete card-scheme rules with conditions, priorities, effective dates, and interchange rates.
 - **CSV imports:** upload transaction files, track import progress, and cancel uploads.
+- **Qualification API:** evaluate pending transactions against rules, log decisions, and calculate fees.
 - **Dashboard:** view transactions and summary statistics.
 
 ## Technology and structure
@@ -46,9 +47,11 @@ docker compose down
 
 On the first startup with an empty database volume, PostgreSQL runs the scripts in `db/` in filename order:
 
-1. `create_schema.sql` creates the main tables.
-2. `seed_reference_data.sql` inserts roles and card schemes.
-3. `upload_tables.sql` creates the upload tables.
+1. `country_regions.sql` creates the country mapping table.
+2. `create_schema.sql` creates the main tables.
+3. `rule_interpreter.sql` creates fallback rates and evaluation indexes.
+4. `seed_reference_data.sql` inserts roles, card schemes, and 249 country mappings.
+5. `upload_tables.sql` creates the upload tables.
 
 ### Configuration
 
@@ -77,6 +80,7 @@ Backend defaults and upload limits are defined in [application.properties](backe
 | `POST /api/uploads/{id}/complete` | Queue the CSV import |
 | `GET /api/uploads/{id}`, `DELETE /api/uploads/{id}` | Check progress or cancel an upload |
 | `POST /predict` (ML service) | Placeholder prediction endpoint |
+| `POST /api/qualifications/evaluate` | Compute qualifications and fees |
 
 Protected backend requests use `Authorization: Bearer <token>`. Current access rules are defined in [SecurityConfig.java](backend/src/main/java/org/schemeguard/backend/config/SecurityConfig.java).
 
