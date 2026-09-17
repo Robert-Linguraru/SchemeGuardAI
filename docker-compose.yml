@@ -8,15 +8,15 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:?Set the Supabase database password in .env}
       APP_JWT_SECRET: ${APP_JWT_SECRET:?Set APP_JWT_SECRET in .env}
       ML_SERVICE_URL: http://ml:8000
-#      OLLAMA_URL: http://ollama:11434
-#      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:4b}
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:4b}
     ports:
       - "8080:8080"
     depends_on:
       ml:
         condition: service_started
-#      ollama-model:
-#        condition: service_completed_successfully
+      ollama-model:
+        condition: service_completed_successfully
 
   frontend:
     image: node:22-bookworm-slim
@@ -36,34 +36,34 @@ services:
     ports:
       - "8000:8000"
 
-#  ollama:
-#    image: ${OLLAMA_IMAGE:-ollama/ollama:latest}
-#    ports:
-#      - "${OLLAMA_PORT:-11434}:11434"
-#    volumes:
-#      - ollama_data:/root/.ollama
-#    healthcheck:
-#      test: ["CMD", "ollama", "list"]
-#      interval: 5s
-#      timeout: 10s
-#      retries: 20
-#      start_period: 10s
-#
-#  ollama-model:
-#    image: ${OLLAMA_IMAGE:-ollama/ollama:latest}
-#    entrypoint: ["/bin/sh", "-c"]
-#    command:
-#      - >-
-#        ollama show "$${OLLAMA_MODEL}" >/dev/null 2>&1 ||
-#        ollama pull "$${OLLAMA_MODEL}"
-#    environment:
-#      OLLAMA_HOST: http://ollama:11434
-#      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:4b}
-#    depends_on:
-#      ollama:
-#        condition: service_healthy
-#    restart: "no"
+  ollama:
+    image: ${OLLAMA_IMAGE:-ollama/ollama:latest}
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+
+  ollama-model:
+    image: ${OLLAMA_IMAGE:-ollama/ollama:latest}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        ollama show "$${OLLAMA_MODEL}" >/dev/null 2>&1 ||
+        ollama pull "$${OLLAMA_MODEL}"
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:4b}
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: "no"
 
 volumes:
   frontend_node_modules:
-#  ollama_data:
+  ollama_data:
