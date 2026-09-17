@@ -11,10 +11,11 @@ import CsvTransactionUploadModal from "../../csvUpload/components/csvUploadModal
 
 interface DashboardPageProps {
     onCreateRule: () => void;
+    onOpenCardSchemes: () => void;
     onEditProfile: () => void;
 }
 
-export function DashboardPage({ onCreateRule, onEditProfile }: DashboardPageProps) {
+export function DashboardPage({ onCreateRule, onOpenCardSchemes, onEditProfile }: DashboardPageProps) {
     const { user } = useAuth();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -58,7 +59,7 @@ export function DashboardPage({ onCreateRule, onEditProfile }: DashboardPageProp
             <header className="dashboard-header">
                 <div className="welcome"><h1>SchemeGuard AI</h1><p>Welcome, {user?.fullName}</p></div>
                 <div className="dashboard-account-actions">
-                    <span className="role-badge">{user?.status} · MERCHANT</span>
+                    <span className="role-badge">{user?.status} · {user?.role}</span>
                     <AccountMenu onEditProfile={onEditProfile} />
                 </div>
             </header>
@@ -67,6 +68,7 @@ export function DashboardPage({ onCreateRule, onEditProfile }: DashboardPageProp
                     <div><p className="eyebrow">PAYMENTS WORKSPACE</p><h2>Transaction overview</h2><p>Monitor interchange qualification and fees.</p></div>
                     <div className="page-heading-actions">
                         <CsvTransactionUploadModal />
+                        <button className="page-nav-button" onClick={onOpenCardSchemes}>Card Schemes</button>
                         <button className="create-rule-button" onClick={onCreateRule}>View Rules</button>
                     </div>
                 </div>

@@ -15,4 +15,6 @@ export interface AuthResponse {
     status: string;
 }
 
-export type AuthenticatedUser = Omit<AuthResponse, "accessToken">;
+export type AuthenticatedUser = Omit<AuthResponse, "accessToken"> & {
+    role: string;
+};

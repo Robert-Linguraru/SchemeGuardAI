@@ -1,0 +1,296 @@
+.entity-list-card {
+    margin-top: 28px;
+    padding: 25px;
+    border-radius: 18px;
+    background: var(--white);
+    color: var(--navy);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
+}
+
+.entity-list-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.entity-list-heading h2 {
+    margin: 4px 0 8px;
+    font-size: 26px;
+}
+
+.entity-list-heading p:not(.eyebrow) {
+    margin: 0;
+    color: #65738b;
+}
+
+.entity-list-toolbar {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    margin: 24px 0 18px;
+}
+
+.entity-list-search {
+    width: min(100%, 430px);
+    color: var(--navy);
+    font-size: 12px;
+}
+
+.entity-list-search input {
+    min-height: 42px;
+    background: #fbfdfe;
+}
+
+.entity-list-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    color: var(--navy);
+    font-size: 13px;
+}
+
+.entity-list-checkbox input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--coral);
+}
+
+.entity-list-feedback {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.entity-list-feedback .error-box {
+    flex: 1;
+}
+
+.entity-list-table-container {
+    overflow-x: auto;
+}
+
+.entity-list-table {
+    min-width: 620px;
+}
+
+.entity-list-table th,
+.entity-list-table td {
+    vertical-align: middle;
+}
+
+.entity-list-sort-button {
+    padding: 0;
+    background: transparent;
+    color: #65738b;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.entity-list-sort-button:hover {
+    color: var(--navy);
+}
+
+.entity-list-status {
+    display: inline-flex;
+    padding: 6px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.entity-list-status.active {
+    background: var(--green-bg);
+    color: var(--green);
+}
+
+.entity-list-status.inactive {
+    background: #edf3f6;
+    color: #65738b;
+}
+
+.entity-list-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.entity-list-action-button {
+    padding: 8px 10px;
+    border: 1px solid #c4d2dc;
+    border-radius: 7px;
+    background: #edf3f6;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.entity-list-action-button:hover {
+    filter: brightness(0.96);
+}
+
+.entity-list-action-success {
+    border-color: #a9dfc4;
+    background: var(--green-bg);
+    color: var(--green);
+}
+
+.entity-list-action-warning {
+    border-color: #f0d29a;
+    background: var(--orange-bg);
+    color: var(--orange);
+}
+
+.entity-list-action-danger {
+    border-color: #f0b7b2;
+    background: #fff1ef;
+    color: var(--red);
+}
+
+.entity-list-action-button:disabled,
+.entity-list-pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.entity-list-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 20px;
+    color: #65738b;
+    font-size: 13px;
+}
+
+.entity-list-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.entity-list-pagination-controls label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #65738b;
+    font-size: 12px;
+}
+
+.entity-list-pagination select {
+    min-height: 36px;
+    padding: 0 8px;
+    border: 1px solid #c4d2dc;
+    border-radius: 7px;
+    background: var(--white);
+    color: var(--navy);
+}
+
+.entity-list-pagination .secondary-button {
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+.entity-list-page-number {
+    min-width: 82px;
+    text-align: center;
+}
+
+.entity-list-success {
+    margin-top: 18px;
+    padding: 12px;
+    border: 1px solid #a9dfc4;
+    border-radius: 8px;
+    background: var(--green-bg);
+    color: var(--green);
+}
+
+.entity-list-dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(9, 22, 32, 0.72);
+}
+
+.entity-list-dialog {
+    width: min(100%, 500px);
+    padding: 28px;
+    border-radius: 18px;
+    background: var(--white);
+    color: var(--navy);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+.entity-list-dialog-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.entity-list-dialog-heading h2 {
+    margin: 4px 0 0;
+    font-size: 24px;
+}
+
+.entity-list-dialog-close {
+    padding: 0 4px;
+    background: transparent;
+    color: var(--navy);
+    font-size: 26px;
+    line-height: 1;
+}
+
+.entity-list-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+@media (max-width: 760px) {
+    .entity-list-toolbar,
+    .entity-list-feedback,
+    .entity-list-pagination {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .entity-list-search {
+        width: 100%;
+    }
+
+    .entity-list-pagination-controls {
+        flex-wrap: wrap;
+    }
+
+    .entity-list-dialog-actions {
+        flex-direction: column-reverse;
+    }
+
+    .entity-list-dialog-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .entity-list-card {
+        padding: 16px;
+    }
+
+    .entity-list-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .entity-list-dialog {
+        padding: 20px;
+    }
+}

@@ -61,6 +61,7 @@ CREATE TABLE transactions (
     three_ds_used BOOLEAN NOT NULL DEFAULT false,
     cvv_present BOOLEAN NOT NULL DEFAULT false,
     status VARCHAR(20) NOT NULL DEFAULT 'NEW' CHECK (status IN ('NEW', 'PROCESSED', 'FAILED')),
+    active BOOLEAN NOT NULL DEFAULT true,
     raw_data JSONB NOT NULL DEFAULT '{}'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     CONSTRAINT cleared_after_authorization CHECK (cleared_at IS NULL OR cleared_at >= authorized_at)
@@ -91,6 +92,7 @@ CREATE TABLE qualification_results (
     rule_id UUID REFERENCES interchange_rules(id),
     rule_version INTEGER,
     qualification_status VARCHAR(30) NOT NULL CHECK (qualification_status IN ('QUALIFIED', 'NOT_QUALIFIED')),
+    active BOOLEAN NOT NULL DEFAULT true,
     qualification_category VARCHAR(100),
     passed_conditions JSONB NOT NULL DEFAULT '[]'::jsonb,
     failed_conditions JSONB NOT NULL DEFAULT '[]'::jsonb,
@@ -109,6 +111,7 @@ CREATE TABLE fee_calculations (
     optimized_rate NUMERIC(8,5) CHECK (optimized_rate IS NULL OR optimized_rate >= 0),
     optimized_fee NUMERIC(19,4) CHECK (optimized_fee IS NULL OR optimized_fee >= 0),
     potential_saving NUMERIC(19,4) NOT NULL DEFAULT 0 CHECK (potential_saving >= 0),
+    active BOOLEAN NOT NULL DEFAULT true,
     calculated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -122,6 +125,7 @@ CREATE TABLE ml_predictions (
     risk_level VARCHAR(10) CHECK (risk_level IN ('LOW', 'MEDIUM', 'HIGH')),
     important_features JSONB NOT NULL DEFAULT '{}'::jsonb,
     recommendation TEXT,
+    active BOOLEAN NOT NULL DEFAULT true,
     predicted_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -154,6 +158,10 @@ CREATE INDEX idx_transactions_scheme_id ON transactions(scheme_id);
 CREATE INDEX idx_transactions_channel ON transactions(channel);
 CREATE INDEX idx_transactions_mcc ON merchants(mcc);
 CREATE INDEX idx_transactions_created_at ON transactions(created_at);
+CREATE INDEX idx_transactions_active ON transactions(active);
 CREATE INDEX idx_qualification_status ON qualification_results(qualification_status);
+CREATE INDEX idx_qualification_active ON qualification_results(active);
 CREATE INDEX idx_rules_lookup ON interchange_rules(scheme_id, region, active, priority);
+CREATE INDEX idx_fee_calculations_active ON fee_calculations(active);
+CREATE INDEX idx_ml_predictions_active ON ml_predictions(active);
 CREATE INDEX idx_audit_logs_entity ON audit_logs(entity_type, entity_id);

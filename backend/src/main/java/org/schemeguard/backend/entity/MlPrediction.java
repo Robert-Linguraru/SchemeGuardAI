@@ -51,6 +51,9 @@ public class MlPrediction {
     @Column(columnDefinition = "TEXT")
     private String recommendation;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @Column(name = "predicted_at", nullable = false)
     private Instant predictedAt;
 

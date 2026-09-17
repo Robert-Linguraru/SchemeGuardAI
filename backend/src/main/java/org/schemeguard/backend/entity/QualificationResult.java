@@ -38,6 +38,9 @@ public class QualificationResult {
     @Column(name = "qualification_status", nullable = false, length = 30)
     private QualificationStatus qualificationStatus;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @Column(name = "qualification_category", length = 100)
     private String qualificationCategory;
 

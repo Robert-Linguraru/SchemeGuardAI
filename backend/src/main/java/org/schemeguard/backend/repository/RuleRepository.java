@@ -15,9 +15,16 @@ public interface RuleRepository extends CrudRepository<Rule, UUID> {
 
     //todo
     @EntityGraph(attributePaths = "scheme")
-    @Query("SELECT r FROM Rule r")
+    //@Query("SELECT r FROM Rule r")
+    @Query("""
+            SELECT r
+            FROM Rule r
+            WHERE r.active = true
+              AND r.scheme.active = true
+              AND (:schemeId IS NULL OR r.scheme.id = :schemeId)
+            """)
     Iterable<Rule> filterApplicableRules(
-            UUID scheme_id
+            @Param("schemeId") UUID schemeId
     );
 
     @EntityGraph(attributePaths = "scheme")

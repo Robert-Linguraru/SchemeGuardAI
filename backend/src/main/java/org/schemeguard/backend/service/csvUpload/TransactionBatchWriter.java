@@ -21,8 +21,8 @@ public class TransactionBatchWriter {
             INSERT INTO transactions (
                 external_id, merchant_id, scheme_id, amount, currency_code,
                 card_type, card_category, channel, issuer_country, merchant_country,
-                authorized_at, cleared_at, three_ds_used, cvv_present, status, raw_data
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', ?::jsonb)
+                authorized_at, cleared_at, three_ds_used, cvv_present, status, raw_data, active
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', ?::jsonb, ?)
             ON CONFLICT (external_id) DO UPDATE SET
                 merchant_id = EXCLUDED.merchant_id,
                 scheme_id = EXCLUDED.scheme_id,
@@ -38,7 +38,8 @@ public class TransactionBatchWriter {
                 three_ds_used = EXCLUDED.three_ds_used,
                 cvv_present = EXCLUDED.cvv_present,
                 status = EXCLUDED.status,
-                raw_data = EXCLUDED.raw_data
+                raw_data = EXCLUDED.raw_data,
+                active = EXCLUDED.active
             """;
 
     private static final String UPSERT_MERCHANT_SQL = """
@@ -57,8 +58,7 @@ public class TransactionBatchWriter {
             INSERT INTO card_schemes (code, name, active)
             VALUES (?, ?, TRUE)
             ON CONFLICT (code) DO UPDATE SET
-                name = EXCLUDED.name,
-                active = TRUE
+                name = EXCLUDED.name
             RETURNING id
             """;
 
@@ -101,7 +101,8 @@ public class TransactionBatchWriter {
                 }
                 statement.setBoolean(parameter++, row.threeDsUsed());
                 statement.setBoolean(parameter++, row.cvvPresent());
-                statement.setString(parameter, row.rawDataJson());
+                statement.setString(parameter++, row.rawDataJson());
+                statement.setBoolean(parameter, isSchemeActive(schemeIds.get(row.network())));
             }
 
             @Override
@@ -134,5 +135,14 @@ public class TransactionBatchWriter {
                 network,
                 network
         );
+    }
+
+    private boolean isSchemeActive(UUID schemeId) {
+        Boolean active = jdbcTemplate.queryForObject(
+                "SELECT active FROM card_schemes WHERE id = ?",
+                Boolean.class,
+                schemeId
+        );
+        return Boolean.TRUE.equals(active);
     }
 }

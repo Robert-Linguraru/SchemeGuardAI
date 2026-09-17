@@ -80,6 +80,9 @@ public class Transaction {
     @Column(nullable = false, length = 20)
     private TransactionStatus status = TransactionStatus.NEW;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "raw_data", nullable = false, columnDefinition = "jsonb")
     private JsonNode rawData;

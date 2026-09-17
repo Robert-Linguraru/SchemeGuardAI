@@ -7,7 +7,7 @@ import org.schemeguard.backend.entity.CardScheme;
 import org.schemeguard.backend.exception.ConflictException;
 import org.schemeguard.backend.exception.GlobalExceptionHandler;
 import org.schemeguard.backend.exception.ResourceNotFoundException;
-import org.schemeguard.backend.repository.CardSchemeRepository;
+import org.schemeguard.backend.repository.CardScheme.CardSchemeRepository;
 import org.schemeguard.backend.repository.RuleRepository;
 import org.schemeguard.backend.service.RuleService;
 import org.springframework.http.HttpStatus;

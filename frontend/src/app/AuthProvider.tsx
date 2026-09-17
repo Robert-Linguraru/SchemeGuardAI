@@ -29,9 +29,32 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+const getRoleFromAccessToken = (): string => {
+    const token = getAccessToken();
+    const payload = token?.split(".")[1];
+
+    if (!payload) {
+        return "MERCHANT";
+    }
+
+    try {
+        const normalizedPayload = payload
+            .replace(/-/g, "+")
+            .replace(/_/g, "/")
+            .padEnd(Math.ceil(payload.length / 4) * 4, "=");
+        const parsedPayload = JSON.parse(window.atob(normalizedPayload)) as {
+            role?: string;
+        };
+
+        return parsedPayload.role || "MERCHANT";
+    } catch {
+        return "MERCHANT";
+    }
+};
+
 const toUser = (response: Awaited<ReturnType<typeof getMe>>): AuthenticatedUser => {
     const { accessToken: _accessToken, ...user } = response;
-    return user;
+    return { ...user, role: getRoleFromAccessToken() };
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {

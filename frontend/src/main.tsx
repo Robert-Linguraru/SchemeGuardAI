@@ -8,6 +8,7 @@ import "./styles/dashboard.css";
 import "./styles/csv-transaction-upload.css";
 import "./styles/rules.css";
 import "./styles/profile.css";
+import "./styles/entity-list.css";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>

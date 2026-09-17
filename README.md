@@ -65,17 +65,46 @@ Backend defaults and upload limits are defined in [application.properties](backe
 
 ## API overview
 
+### Authentication and profile
+
 | Endpoint | Purpose |
 | --- | --- |
 | `POST /api/auth/register`, `POST /api/auth/login` | Register or sign in |
 | `GET /api/auth/me`, `PUT /api/auth/profile` | Read or update the current account |
+
+### Card schemes
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /api/card-schemes` | List active schemes; supports `includeInactive`, `search`, `page`, `size` and `sort` |
+| `GET /api/card-schemes/{id}` | Read one active scheme; admins can use `includeInactive=true` |
+| `POST /api/card-schemes` | Create a card scheme |
+| `PATCH /api/card-schemes/{id}` | Update the scheme `code` and `name` |
+| `PATCH /api/card-schemes/{id}/activate` | Activate the scheme; `{ "cascade": true }` also activates associated entities |
+| `PATCH /api/card-schemes/{id}/deactivate` | Deactivate the scheme and associated rules, transactions and results |
+| `DELETE /api/card-schemes/{id}` | Hard-delete the scheme and its dependent rules, transactions and results |
+
+### Rules
+
+| Endpoint | Purpose |
+| --- | --- |
 | `GET /api/rule/getRules`, `GET /api/rule/getRule?id=...` | List rules or read one rule |
 | `POST /api/rule/upload`, `POST /api/rule/delete?id=...` | Create or delete a rule |
+
+### Transactions and uploads
+
+| Endpoint | Purpose |
+| --- | --- |
 | `GET /api/transactions/mock` | Retrieve mock dashboard transactions |
 | `POST /api/uploads` | Create an upload session |
 | `PUT /api/uploads/{id}/parts/{partNumber}` | Upload a binary file chunk |
 | `POST /api/uploads/{id}/complete` | Queue the CSV import |
 | `GET /api/uploads/{id}`, `DELETE /api/uploads/{id}` | Check progress or cancel an upload |
+
+### Machine learning
+
+| Endpoint | Purpose |
+| --- | --- |
 | `POST /predict` (ML service) | Placeholder prediction endpoint |
 
 Protected backend requests use `Authorization: Bearer <token>`. Current access rules are defined in [SecurityConfig.java](backend/src/main/java/org/schemeguard/backend/config/SecurityConfig.java).

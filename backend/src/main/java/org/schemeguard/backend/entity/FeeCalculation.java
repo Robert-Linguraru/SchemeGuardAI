@@ -52,6 +52,9 @@ public class FeeCalculation {
     @Column(name = "potential_saving", nullable = false, precision = 19, scale = 4)
     private BigDecimal potentialSaving = BigDecimal.ZERO;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @Column(name = "calculated_at", nullable = false)
     private Instant calculatedAt;
 

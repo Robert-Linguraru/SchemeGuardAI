@@ -6,7 +6,7 @@ import org.schemeguard.backend.entity.CardScheme;
 import org.schemeguard.backend.entity.Rule;
 import org.schemeguard.backend.exception.ConflictException;
 import org.schemeguard.backend.exception.ResourceNotFoundException;
-import org.schemeguard.backend.repository.CardSchemeRepository;
+import org.schemeguard.backend.repository.CardScheme.CardSchemeRepository;
 import org.schemeguard.backend.repository.RuleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +23,7 @@ public class RuleService {
     public Rule createRule(RuleRequestDto dto) {
         CardScheme scheme = cardSchemeRepository
                 .findById(dto.getSchemeId())
+                .filter(foundScheme -> Boolean.TRUE.equals(foundScheme.getActive()))
             .orElseThrow(() -> new ResourceNotFoundException("Card scheme not found"));
 
         if (ruleRepository.existsBySchemeIdAndRuleCodeAndVersion(

@@ -6,11 +6,12 @@ import { RulesPage } from "../features/rules/pages/RulesPage";
 import { RuleDetailsPage } from "../features/rules/pages/RuleDetailsPage";
 import { DashboardPage } from "../features/transactions/pages/DashboardPage";
 import { ProfilePage } from "../features/auth/pages/ProfilePage";
+import { CardSchemesPage } from "../features/cardSchemes/pages/CardSchemesPage";
 import { LoadingState } from "../shared/components/LoadingState";
 
 function AuthenticatedApp() {
     const [view, setView] = useState<
-        "dashboard" | "rules" | "upload" | "details" | "profile"
+        "dashboard" | "rules" | "upload" | "details" | "profile" | "card-schemes"
     >("dashboard");
 
     const [selectedRuleId, setSelectedRuleId] =
@@ -27,6 +28,15 @@ function AuthenticatedApp() {
 
     if (view === "profile") {
         return <ProfilePage onBack={() => setView("dashboard")} onEditProfile={() => setView("profile")} />;
+    }
+
+    if (view === "card-schemes") {
+        return (
+            <CardSchemesPage
+                onBack={() => setView("dashboard")}
+                onEditProfile={() => setView("profile")}
+            />
+        );
     }
 
     if (view === "details" && selectedRuleId) {
@@ -57,6 +67,7 @@ function AuthenticatedApp() {
     return (
             <DashboardPage
                 onCreateRule={() => setView("rules")}
+                onOpenCardSchemes={() => setView("card-schemes")}
                 onEditProfile={() => setView("profile")}
             />
     );
