@@ -2,6 +2,11 @@
 
 SchemeGuardAI manages card-scheme rules, qualifies imported transactions, and calculates interchange fees.
 
+!! You have to run the container that pulls the ollama model before running the entire project
+```
+docker compose up ollama-model
+```
+
 ## Main features
 
 - **Accounts:** registration, login, and profile updates.
