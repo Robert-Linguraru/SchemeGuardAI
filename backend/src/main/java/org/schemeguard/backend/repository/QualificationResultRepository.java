@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 public interface QualificationResultRepository extends CrudRepository<QualificationResult, UUID> {
@@ -24,4 +25,15 @@ public interface QualificationResultRepository extends CrudRepository<Qualificat
             @Param("transactionId") UUID transactionId
     );
 
+    @Query("select qr from QualificationResult qr join fetch qr.transaction t order by qr.evaluatedAt desc")
+    List<QualificationResult> findAllByOrderByEvaluatedAtDesc();
+
+    @Query(value = """
+            select qr.transaction_id as transactionId, qr.id as resultId,
+                   qr.qualification_status as qualificationStatus,
+                   qr.evaluated_at as evaluatedAt
+            from qualification_results qr
+            order by qr.evaluated_at desc
+            """, nativeQuery = true)
+    List<AnalyticsQualificationProjection> findAllForAnalytics();
 }

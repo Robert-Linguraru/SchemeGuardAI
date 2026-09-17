@@ -16,11 +16,13 @@ import CsvTransactionUploadModal from "../../csvUpload/components/csvUploadModal
 interface DashboardPageProps {
     onCreateRule: () => void;
     onEditProfile: () => void;
+    onOpenAnalysisDashboard: () => void;
 }
 
 export function DashboardPage({
     onCreateRule,
-    onEditProfile
+    onEditProfile,
+    onOpenAnalysisDashboard
 }: DashboardPageProps) {
     const { user } = useAuth();
 
@@ -145,6 +147,14 @@ export function DashboardPage({
                     </div>
 
                     <div className="page-heading-actions">
+                        <button
+                            type="button"
+                            className="dashboard-button"
+                            onClick={onOpenAnalysisDashboard}
+                        >
+                            Dashboard
+                        </button>
+
                         <CsvTransactionUploadModal />
 
                         <button
