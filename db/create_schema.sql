@@ -90,7 +90,7 @@ CREATE TABLE qualification_results (
     transaction_id UUID NOT NULL REFERENCES transactions(id) ON DELETE CASCADE,
     rule_id UUID REFERENCES interchange_rules(id),
     rule_version INTEGER,
-    qualification_status VARCHAR(30) NOT NULL CHECK (qualification_status IN ('QUALIFIED', 'PARTIALLY_QUALIFIED', 'NOT_QUALIFIED')),
+    qualification_status VARCHAR(30) NOT NULL CHECK (qualification_status IN ('QUALIFIED', 'NOT_QUALIFIED')),
     qualification_category VARCHAR(100),
     passed_conditions JSONB NOT NULL DEFAULT '[]'::jsonb,
     failed_conditions JSONB NOT NULL DEFAULT '[]'::jsonb,

@@ -1,4 +1,94 @@
-# Exemplu rule-based component (regula pentru categorie interchange fee tranzactie)
+﻿# SchemeGuardAI
+
+SchemeGuardAI manages card-scheme rules, qualifies imported transactions, and calculates interchange fees.
+
+## Main features
+
+- **Accounts:** registration, login, and profile updates.
+- **Rules:** create, list, inspect, and delete card-scheme rules with conditions, priorities, effective dates, and interchange rates.
+- **CSV imports:** upload transaction files, track import progress, and cancel uploads.
+- **Qualification API:** evaluate pending transactions against rules, log decisions, and calculate fees.
+- **Dashboard:** view transactions and summary statistics.
+
+## Technology and structure
+
+| Directory | Purpose | Technology |
+| --- | --- | --- |
+| `frontend/` | Web interface | React 18, TypeScript, Vite 6 |
+| `backend/` | REST API, authentication, rules, and CSV imports | Java 26, Spring Boot 4.1.1, Maven |
+| `ML/` | ML service scaffold | Python 3.12, FastAPI |
+| `db/` | Database schema and reference data | PostgreSQL 17 |
+
+## Run locally
+
+Install Docker with Docker Compose, then run this command from the project root:
+
+```sh
+docker compose up --build
+```
+
+| Service | Local address |
+| --- | --- |
+| Web application | http://localhost:5173 |
+| Backend API | http://localhost:8080 |
+| ML API documentation | http://localhost:8000/docs |
+| ML health check | http://localhost:8000/health |
+| PostgreSQL | `localhost:5433` |
+
+Open the web application and register an account to get started. The database seeds the `ADMIN`, `ANALYST`, and `MERCHANT` roles, plus Visa and Mastercard schemes.
+
+To stop the services while keeping database data:
+
+```sh
+docker compose down
+```
+
+### Database setup
+
+On the first startup with an empty database volume, PostgreSQL runs the scripts in `db/` in filename order:
+
+1. `country_regions.sql` creates the country mapping table.
+2. `create_schema.sql` creates the main tables.
+3. `rule_interpreter.sql` creates fallback rates and evaluation indexes.
+4. `seed_reference_data.sql` inserts roles, card schemes, and 249 country mappings.
+5. `upload_tables.sql` creates the upload tables.
+
+![DbDiagram](mermaid.png)
+
+### Configuration
+
+Backend defaults and upload limits are defined in [application.properties](backend/src/main/resources/application.properties).
+
+| Environment variable | Purpose / default |
+| --- | --- |
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://localhost:5433/schemeguard` |
+| `SPRING_DATASOURCE_USERNAME` | Database user; `schemeguard` |
+| `SPRING_DATASOURCE_PASSWORD` | Database password; `schemeguard` |
+| `CORS_ALLOWED_ORIGIN` | Allowed frontend origin; `http://localhost:5173` |
+| `APP_JWT_SECRET` | Overrides the development JWT signing secret |
+| `UPLOAD_STORAGE_DIRECTORY` | Temporary upload storage; `/tmp/schemeguard-transaction-uploads` |
+
+## API overview
+
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /api/auth/register`, `POST /api/auth/login` | Register or sign in |
+| `GET /api/auth/me`, `PUT /api/auth/profile` | Read or update the current account |
+| `GET /api/rule/getRules`, `GET /api/rule/getRule?id=...` | List rules or read one rule |
+| `POST /api/rule/upload`, `POST /api/rule/delete?id=...` | Create or delete a rule |
+| `GET /api/transactions/mock` | Retrieve mock dashboard transactions |
+| `POST /api/uploads` | Create an upload session |
+| `PUT /api/uploads/{id}/parts/{partNumber}` | Upload a binary file chunk |
+| `POST /api/uploads/{id}/complete` | Queue the CSV import |
+| `GET /api/uploads/{id}`, `DELETE /api/uploads/{id}` | Check progress or cancel an upload |
+| `POST /predict` (ML service) | Placeholder prediction endpoint |
+| `POST /api/qualifications/evaluate` | Compute qualifications and fees |
+
+Protected backend requests use `Authorization: Bearer <token>`. Current access rules are defined in [SecurityConfig.java](backend/src/main/java/org/schemeguard/backend/config/SecurityConfig.java).
+
+For a transaction CSV example, see [transactions_40.csv](transactions_40.csv). Required columns are defined in [CsvImportService.java](backend/src/main/java/org/schemeguard/backend/service/csvUpload/CsvImportService.java).
+
+# Rule-based component example
 ```json
 
 {
@@ -50,7 +140,7 @@
 ```
 
 
-# Exemplu tranzactie
+# Transaction example
 
 ```json
 
@@ -87,8 +177,7 @@
 
 ```
 
-# Exemplu rezultate tranzactie dupa aplicarea regulilor
-
+# Qualification result example
 ```json
 
 Qualified

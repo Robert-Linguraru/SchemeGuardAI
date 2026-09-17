@@ -5,12 +5,13 @@ import { RuleUploadPage } from "../features/rules/pages/RuleUploadPage";
 import { RulesPage } from "../features/rules/pages/RulesPage";
 import { RuleDetailsPage } from "../features/rules/pages/RuleDetailsPage";
 import { DashboardPage } from "../features/transactions/pages/DashboardPage";
+import { AnalysisDashboardPage } from "../features/transactions/pages/AnalysisDashboardPage";
 import { ProfilePage } from "../features/auth/pages/ProfilePage";
 import { LoadingState } from "../shared/components/LoadingState";
 
 function AuthenticatedApp() {
     const [view, setView] = useState<
-        "dashboard" | "rules" | "upload" | "details" | "profile"
+        "dashboard" | "analysis-dashboard" | "rules" | "upload" | "details" | "profile"
     >("dashboard");
 
     const [selectedRuleId, setSelectedRuleId] =
@@ -27,6 +28,15 @@ function AuthenticatedApp() {
 
     if (view === "profile") {
         return <ProfilePage onBack={() => setView("dashboard")} onEditProfile={() => setView("profile")} />;
+    }
+
+    if (view === "analysis-dashboard") {
+        return (
+            <AnalysisDashboardPage
+                onBack={() => setView("dashboard")}
+                onEditProfile={() => setView("profile")}
+            />
+        );
     }
 
     if (view === "details" && selectedRuleId) {
@@ -58,6 +68,7 @@ function AuthenticatedApp() {
             <DashboardPage
                 onCreateRule={() => setView("rules")}
                 onEditProfile={() => setView("profile")}
+                onOpenAnalysisDashboard={() => setView("analysis-dashboard")}
             />
     );
 }
