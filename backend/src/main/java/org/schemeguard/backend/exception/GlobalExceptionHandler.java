@@ -1,96 +1,70 @@
 package org.schemeguard.backend.exception;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.OffsetDateTime;
-import java.util.logging.Logger;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    Logger logger = Logger.getLogger(GlobalExceptionHandler.class.getName());
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiError> handleDatabaseError(
-            DataIntegrityViolationException exception,
-            HttpServletRequest request
-    ) {
-        return buildError(
-                HttpStatus.CONFLICT,
-                request.getRequestURI().startsWith("/api/rule")
-                        ? "A rule with this code already exists."
-                        : "The request could not be completed."
-        );
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationError(
-            MethodArgumentNotValidException exception,
-            HttpServletRequest request
-    ) {
-        return buildError(
-                HttpStatus.BAD_REQUEST,
-                request.getRequestURI().startsWith("/api/rule")
-                        ? "Some rule fields are invalid. Please review the form."
-                        : "Invalid request data"
-        );
-    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiError> handleResourceNotFound(
             ResourceNotFoundException exception
     ) {
-        String errorCode = exception.getMessage().startsWith("Card scheme")
-                ? "CARD_SCHEME_NOT_FOUND"
-                : "RULE_NOT_FOUND";
-        return buildError(HttpStatus.NOT_FOUND, exception.getMessage(), errorCode);
+        String exceptionMessage = exception.getMessage();
+
+        if ("Card scheme not found".equals(exceptionMessage)) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ApiError(
+                            HttpStatus.NOT_FOUND.value(),
+                            "Card scheme could not be found.",
+                            OffsetDateTime.now(),
+                            "CARD_SCHEME_NOT_FOUND",
+                            null
+                    ));
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(
+                        HttpStatus.NOT_FOUND.value(),
+                        "This rule could not be found.",
+                        OffsetDateTime.now(),
+                        "RULE_NOT_FOUND",
+                        null
+                ));
     }
 
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiError> handleConflict(
             ConflictException exception
     ) {
-        return buildError(
-                HttpStatus.CONFLICT,
-                exception.getMessage()
-        );
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ApiError(
+                        HttpStatus.CONFLICT.value(),
+                        exception.getMessage(),
+                        OffsetDateTime.now(),
+                        "CONFLICT",
+                        null
+                ));
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorized(
             UnauthorizedException exception
     ) {
-        return buildError(
-                HttpStatus.UNAUTHORIZED,
-                exception.getMessage()
-        );
-    }
-
-    private ResponseEntity<ApiError> buildError(
-            HttpStatus status,
-            String message
-    ) {
-        return buildError(status, message, null);
-    }
-
-    private ResponseEntity<ApiError> buildError(
-            HttpStatus status,
-            String message,
-            String errorCode
-    ) {
         return ResponseEntity
-                .status(status)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiError(
-                        status.value(),
-                        message,
+                        HttpStatus.UNAUTHORIZED.value(),
+                        exception.getMessage(),
                         OffsetDateTime.now(),
-                        errorCode,
+                        "UNAUTHORIZED",
                         null
                 ));
     }
