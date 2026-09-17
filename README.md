@@ -53,6 +53,8 @@ On the first startup with an empty database volume, PostgreSQL runs the scripts 
 4. `seed_reference_data.sql` inserts roles, card schemes, and 249 country mappings.
 5. `upload_tables.sql` creates the upload tables.
 
+![DbDiagram](mermaid.png)
+
 ### Configuration
 
 Backend defaults and upload limits are defined in [application.properties](backend/src/main/resources/application.properties).
