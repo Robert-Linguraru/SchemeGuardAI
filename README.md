@@ -23,8 +23,23 @@ SchemeGuardAI manages card-scheme rules, qualifies imported transactions, and ca
 
 Install Docker with Docker Compose, then run this command from the project root:
 
+```powershell
+Copy-Item .env.example .env
+```
+
+Open `.env` and fill the blank password and JWT-secret values. The `.env` file is ignored
+by Git and must never be committed. Then start the application:
+
+Generate a suitable JWT secret in PowerShell with:
+
+```powershell
+[Convert]::ToHexString(
+    [Security.Cryptography.RandomNumberGenerator]::GetBytes(32)
+).ToLower()
+```
+
 ```sh
-docker compose up --build
+docker compose up --build --remove-orphans
 ```
 
 | Service | Local address |
@@ -33,9 +48,10 @@ docker compose up --build
 | Backend API | http://localhost:8080 |
 | ML API documentation | http://localhost:8000/docs |
 | ML health check | http://localhost:8000/health |
-| PostgreSQL | `localhost:5433` |
+| Ollama API | http://localhost:11434 |
 
-Open the web application and register an account to get started. The database seeds the `ADMIN`, `ANALYST`, and `MERCHANT` roles, plus Visa and Mastercard schemes.
+Open the web application and register an account to get started. The application uses the
+Supabase PostgreSQL database configured in `.env`.
 
 To stop the services while keeping database data:
 
@@ -43,15 +59,22 @@ To stop the services while keeping database data:
 docker compose down
 ```
 
-### Database setup
+### Supabase database setup
 
-On the first startup with an empty database volume, PostgreSQL runs the scripts in `db/` in filename order:
+Docker Compose does not create or migrate the remote Supabase database. Before starting
+the application for the first time, run these files once in the Supabase SQL Editor, in
+the following order:
 
 1. `country_regions.sql` creates the country mapping table.
 2. `create_schema.sql` creates the main tables.
 3. `rule_interpreter.sql` creates fallback rates and evaluation indexes.
 4. `seed_reference_data.sql` inserts roles, card schemes, and 249 country mappings.
 5. `upload_tables.sql` creates the upload tables.
+
+The backend uses `spring.jpa.hibernate.ddl-auto=validate`, so startup fails with a clear
+schema-validation error if these tables have not yet been created in Supabase. The
+`--remove-orphans` option removes the old local PostgreSQL container after this migration;
+it does not delete its `postgres_data` volume.
 
 ![DbDiagram](mermaid.png)
 
@@ -61,12 +84,29 @@ Backend defaults and upload limits are defined in [application.properties](backe
 
 | Environment variable | Purpose / default |
 | --- | --- |
-| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://localhost:5433/schemeguard` |
-| `SPRING_DATASOURCE_USERNAME` | Database user; `schemeguard` |
-| `SPRING_DATASOURCE_PASSWORD` | Database password; `schemeguard` |
+| `SPRING_DATASOURCE_URL` | Supabase JDBC URL; required |
+| `SPRING_DATASOURCE_USERNAME` | Supabase database user; required |
+| `SPRING_DATASOURCE_PASSWORD` | Supabase database password; required |
 | `CORS_ALLOWED_ORIGIN` | Allowed frontend origin; `http://localhost:5173` |
-| `APP_JWT_SECRET` | Overrides the development JWT signing secret |
+| `APP_JWT_SECRET` | JWT signing secret of at least 32 characters; required |
 | `UPLOAD_STORAGE_DIRECTORY` | Temporary upload storage; `/tmp/schemeguard-transaction-uploads` |
+| `OLLAMA_URL` | Ollama base URL; Compose supplies `http://ollama:11434` |
+| `OLLAMA_MODEL` | Model pulled and used by the backend; `qwen3:4b` |
+| `OLLAMA_PORT` | Ollama port exposed on the host; `11434` |
+| `OLLAMA_IMAGE` | Ollama Docker image; `ollama/ollama:latest` |
+
+Spring imports `.env` from either the repository root or the `backend` module's parent
+directory. This supports starting the backend from IntelliJ or Maven. Docker Compose also
+reads the repository-level `.env` automatically and passes the same Supabase connection
+values into the backend container. Both launch methods therefore use the same database.
+
+For Supabase, use a JDBC URL without embedding the password, for example:
+
+```properties
+SPRING_DATASOURCE_URL=jdbc:postgresql://your-pooler-host:5432/postgres?sslmode=require
+SPRING_DATASOURCE_USERNAME=your-supabase-database-user
+SPRING_DATASOURCE_PASSWORD=your-supabase-database-password
+```
 
 ## API overview
 
@@ -83,6 +123,7 @@ Backend defaults and upload limits are defined in [application.properties](backe
 | `GET /api/uploads/{id}`, `DELETE /api/uploads/{id}` | Check progress or cancel an upload |
 | `POST /predict` (ML service) | Placeholder prediction endpoint |
 | `POST /api/qualifications/evaluate` | Compute qualifications and fees |
+| `GET /api/transactions/{id}/explanation` | Generate a Romanian explanation through Ollama |
 
 Protected backend requests use `Authorization: Bearer <token>`. Current access rules are defined in [SecurityConfig.java](backend/src/main/java/org/schemeguard/backend/config/SecurityConfig.java).
 
