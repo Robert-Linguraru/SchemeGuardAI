@@ -146,9 +146,10 @@ public class LlmExplanationService {
                 "Qualification status:"
         );
 
-        String reason = extractValue(
+        String reason = extractFirstValue(
                 transactionData,
-                "Original explanation:"
+                "Original explanation:",
+                "Rule explanation:"
         );
 
         String fee = extractValue(
@@ -209,6 +210,17 @@ public class LlmExplanationService {
         return data
                 .substring(valueStart, valueEnd)
                 .trim();
+    }
+
+    private String extractFirstValue(String data, String... fieldNames) {
+        for (String fieldName : fieldNames) {
+            String value = extractValue(data, fieldName);
+            if (!value.isBlank()) {
+                return value;
+            }
+        }
+
+        return "";
     }
 
     private record OllamaRequest(
