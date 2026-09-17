@@ -58,6 +58,157 @@
 	display: contents;
 }
 
+.dashboard-button {
+	padding: 12px 18px;
+	border-radius: 8px;
+	background: var(--white);
+	color: var(--navy);
+	font-weight: 700;
+}
+
+.dashboard-button:hover {
+	background: #edf3f6;
+}
+
+.analysis-dashboard .content {
+	margin-top: 72px;
+}
+
+.analysis-filters {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(110px, 1fr)) auto;
+	align-items: end;
+	gap: 10px;
+	margin: 28px 0 18px;
+	padding: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.analysis-filters label {
+	color: var(--muted);
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: .4px;
+}
+
+.analysis-filters input,
+.analysis-filters select {
+	min-width: 0;
+	margin-top: 6px;
+	padding: 9px 10px;
+	border: 1px solid #526b7b;
+	border-radius: 7px;
+	background: #213b4c;
+	color: var(--white);
+	font-size: 12px;
+}
+
+.filter-reset {
+	padding: 10px 14px;
+	border-radius: 8px;
+	background: var(--white);
+	color: var(--navy);
+	font-weight: 700;
+}
+
+.analysis-kpi-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 14px;
+	margin-bottom: 18px;
+}
+
+.analysis-kpi-grid article,
+.analysis-card {
+	padding: 20px;
+	border: 1px solid rgba(255, 255, 255, .12);
+	border-radius: 14px;
+	background: rgba(255, 255, 255, .09);
+}
+
+.analysis-kpi-grid span,
+.analysis-kpi-grid small,
+.analysis-card-heading span,
+.analysis-chart-caption {
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.analysis-kpi-grid strong {
+	display: block;
+	margin: 10px 0 5px;
+	font-size: 25px;
+}
+
+.analysis-chart-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.analysis-card-heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 20px;
+}
+
+.analysis-card h3 {
+	margin: 0;
+	font-size: 16px;
+}
+
+.analysis-bars {
+	display: grid;
+	gap: 12px;
+}
+
+.analysis-bar-row {
+	display: grid;
+	grid-template-columns: 105px minmax(0, 1fr) 30px;
+	align-items: center;
+	gap: 10px;
+	font-size: 12px;
+}
+
+.analysis-bar-row > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.analysis-bar-track {
+	height: 8px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .14);
+	overflow: hidden;
+}
+
+.analysis-bar-track i {
+	display: block;
+	height: 100%;
+	border-radius: inherit;
+	background: var(--blue);
+}
+
+.analysis-bar-row strong {
+	text-align: right;
+}
+
+.analysis-chart-caption,
+.analysis-empty {
+	margin: 3px 0 0;
+}
+
+.analysis-empty {
+	color: var(--muted);
+	font-size: 13px;
+}
+
 .welcome h1 {
 	margin: 0 0 6px;
 	font-size: 30px;
@@ -169,6 +320,51 @@
 	overflow-x: auto;
 }
 
+.transaction-table-wrapper {
+	display: grid;
+	gap: 12px;
+}
+
+.table-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	color: #65738b;
+	font-size: 12px;
+}
+
+.table-pagination {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.table-pagination button,
+.table-sort-button {
+	padding: 6px 9px;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	background: var(--white);
+	color: var(--navy);
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.table-pagination button:disabled {
+	cursor: not-allowed;
+	opacity: .45;
+}
+
+.table-sort-button {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #65738b;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -222,6 +418,18 @@ tbody tr:hover {
 }
 
 @media (max-width: 900px) {
+	.analysis-filters {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.analysis-kpi-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.analysis-chart-grid {
+		grid-template-columns: 1fr;
+	}
+
 	.stats-grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
@@ -251,6 +459,11 @@ tbody tr:hover {
 		grid-template-columns: 1fr;
 	}
 
+	.analysis-filters,
+	.analysis-kpi-grid {
+		grid-template-columns: 1fr;
+	}
+
 	.header-actions {
 		align-items: flex-start;
 		flex-direction: column;
@@ -262,6 +475,11 @@ tbody tr:hover {
 	}
 
 	.section-header {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.table-toolbar {
 		align-items: flex-start;
 		flex-direction: column;
 	}
