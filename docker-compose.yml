@@ -7,6 +7,8 @@ services:
       SPRING_DATASOURCE_USERNAME: schemeguard
       SPRING_DATASOURCE_PASSWORD: schemeguard
       ML_SERVICE_URL: http://ml:8000
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:4b}
     ports:
       - "8080:8080"
     depends_on:
@@ -14,6 +16,8 @@ services:
         condition: service_healthy
       ml:
         condition: service_started
+      ollama-pull:
+        condition: service_completed_successfully
 
   frontend:
     image: node:22-bookworm-slim
@@ -32,6 +36,32 @@ services:
       context: ./ML
     ports:
       - "8000:8000"
+
+  ollama:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    restart: unless-stopped
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    command: ["pull", "${OLLAMA_MODEL:-qwen3:4b}"]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: "no"
 
   db:
     image: postgres:17-alpine
@@ -52,4 +82,5 @@ services:
 
 volumes:
   frontend_node_modules:
+  ollama_data:
   postgres_data:
