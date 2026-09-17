@@ -40,10 +40,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
-                                "/api/rule/upload",
-                                "/api/rule/getRule",
-                                "/api/rule/getRules",
-                                "/api/rule/delete",
+                                "/api/rule/*",
+                                "/api/qualifications/evaluate",
                                 "/test",
                                 "/error"
                         )
